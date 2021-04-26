@@ -1,0 +1,6 @@
+cdsapi
+MetPy
+tqdm
+xarray
+numpy
+netCDF4
