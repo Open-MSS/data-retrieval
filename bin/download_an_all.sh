@@ -1,4 +1,7 @@
 #!/bin/bash
+#Copyright (C) 2021 by Forschungszentrum Juelich GmbH
+#Author(s): May Baer
+
 if [ ! -f grib/${BASE}.ml.grib ]; then
     mars <<EOF
     retrieve,
@@ -41,7 +44,7 @@ if [ ! -f grib/${BASE}.pv.grib ]; then
     area=0/0/-80/360,
     grid=1.0/1.0,
     class=od,
-    levelist=all,
+    levelist=2000,
     levtype=pv,
     param=3/54/131/132/133/203,
     stream=oper,
@@ -58,7 +61,7 @@ if [ ! -f grib/${BASE}.tl.grib ]; then
     area=0/0/-80/360,
     grid=1.0/1.0,
     class=od,
-    levelist=all,
+    levelist=330/350/370/395/475,
     levtype=pt,
     param=54/60/131/132/133/155/203,
     stream=oper,

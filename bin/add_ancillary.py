@@ -1,8 +1,6 @@
 """
-Copyright (C) 2012 by Forschungszentrum Juelich GmbH
-Author(s): Joern Ungermann
-
-Please see docstring of main().
+Copyright (C) 2021 by Forschungszentrum Juelich GmbH
+Author(s): Joern Ungermann, May Baer
 """
 import datetime
 import itertools
@@ -21,11 +19,8 @@ VARIABLES = {
     "pt": ("FULL", "K", "air_potential_temperature", "Potential Temperature"),
     "pv": ("FULL", "m^2 K s^-1 kg^-1 10E-6", "ertel_potential_vorticity", "Potential Vorticity"),
     "mod_pv": ("FULL", "m^2 K s^-1 kg^-1 10E-6", "", "Modified Potential Vorticity"),
-    "EQLAT": ("FULL", "degree N", "equivalent_latitude", "Equivalent Latitude"),
     "zh": ("FULL", "km", "geopotential_height", "Geopotential Altitude"),
     "n2": ("FULL", "s^-2", "square_of_brunt_vaisala_frequency_in_air", "N^2"),
-    "SURFACE_UV": ("HORIZONTAL", "m s^-1", "", "Horizontal Wind Speed at "),
-    "SURFACE_PV": ("HORIZONTAL", "m^2 K s^-1 kg^-1", "", "Potential Vorticity at "),
     "TROPOPAUSE": ("HORIZONTAL", "km", "tropopause_altitude",
                    "vertical location of first WMO thermal tropopause"),
     "TROPOPAUSE_PRESSURE": ("HORIZONTAL", "Pa", "tropopause_air_pressure",
@@ -46,18 +41,10 @@ def get_create_variable(ncin, name):
     Either retrieves a variable from NetCDF or creates it,
     in case it is not yet present.
     """
-    is_surface = False
     if name not in ncin.variables:
         if name in VARIABLES:
             dim, units, standard_name, long_name = VARIABLES[name]
-        else:
-            fields = name.split("_")
-            assert fields[1] == "SURFACE"
-            dim, units, long_name = VARIABLES["_".join(fields[1:4:2])]
-            long_name += fields[2]
-            is_surface = True
-        dims = ("time", "lev_2", "lat", "lon") if not is_surface else ("time", "lat", "lon")
-        var_id = ncin.createVariable(name, "f4", dims,
+        var_id = ncin.createVariable(name, "f4", ("time", "lev_2", "lat", "lon"),
                                      **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
         var_id.units = units
         var_id.long_name = long_name
@@ -159,12 +146,6 @@ def parse_args(args):
                     help="Add pv potential vorticity.")
     oppa.add_option('--tropopause', '', action='store_true',
                     help="Add first and second tropopause")
-    oppa.add_option('--eqlat', '', action='store_true',
-                    help="Add equivalent latitude")
-    oppa.add_option('--surface_pressure', '', action='store', type=str,
-                    help="Add PV and UV on given hPa surfaces, e.g., 200:300:400.")
-    oppa.add_option('--surface_theta', '', action='store', type=str,
-                    help="Add PV and UV on given theta surfaces, e.g., 200:300:400.")
     opt, arg = oppa.parse_args(args)
 
     if len(arg) != 1:
@@ -174,164 +155,6 @@ def parse_args(args):
         print("Cannot find model data at", arg[1])
         exit(1)
     return opt, arg[0]
-
-
-def add_eqlat(ncin):
-    print("Adding EQLAT...")
-    pv = ncin.variables["pv"][:]
-    theta = ncin.variables["pt"][:]
-    eqlat = np.zeros(pv.shape)
-
-    latc = ncin.variables["lat"][:]
-    lonc = ncin.variables["lon"][:]
-    if min(latc) > -75 or max(latc) < 75:
-        print("WARNING:")
-        print("  Not enough latitudes present for this to be a global set.")
-        print("  EQLAT may not be meaningful.")
-
-    lats = np.zeros(len(latc) + 1)
-    lats[:-1] = latc
-    lats[1:] += latc
-    lats[1:-1] /= 2
-    lats = np.deg2rad(lats)
-
-    area = np.absolute(np.sin(lats[:-1]) - np.sin(lats[1:])) / (2 * len(lonc))
-    assert area[0] > 0
-    if latc[0] > latc[1]:
-        baseareas = (np.sin(np.deg2rad(latc[0])) -
-                     np.sin(np.deg2rad(latc))) / 2.
-    else:
-        baseareas = (np.sin(np.deg2rad(latc[-1])) -
-                     np.sin(np.deg2rad(latc)))[::-1] / 2.
-        latc = latc[::-1]
-    assert(baseareas[1] > baseareas[0])
-
-    thetagrid = np.hstack([np.arange(250., 400., 2),
-                           np.arange(400., 500., 5.),
-                           np.arange(500., 750., 10.),
-                           np.arange(750., 1000., 25.),
-                           np.arange(1000., 3000., 100.)])
-    log_thetagrid = np.log(thetagrid)
-
-    newshape = list(pv.shape)
-    newshape[1] = len(thetagrid)
-
-    p_theta = np.zeros(newshape)
-    p_theta.swapaxes(1, 3)[:] = thetagrid
-
-    # convert u, v, theta to pressure grid
-    theta_pv = np.zeros(newshape)
-    lp = np.log(theta[0, :, 0, 0])
-    reverse = False
-    if lp[0] > lp[-1]:
-        theta = theta[:, ::-1]
-        pv = pv[:, ::-1]
-        reverse = True
-    for iti, ilo, ila in tqdm.tqdm(
-            itertools.product(range(newshape[0]), range(newshape[3]), range(newshape[2])),
-            total=newshape[0] * newshape[3] * newshape[2], ascii=True,
-            desc="Interpolation to theta levels:"):
-        lp = np.log(theta[iti, :, ila, ilo])
-        theta_pv[iti, :, ila, ilo] = np.interp(
-            log_thetagrid, lp, pv[iti, :, ila, ilo],
-            left=np.nan, right=np.nan)
-
-    theta_eqlat = np.zeros(newshape)
-    for iti in range(newshape[0]):
-        for lev in tqdm.tqdm(range(newshape[1]), desc="Integration", ascii=True):
-            areas = np.zeros(len(latc) + 1)
-            pv_limits = np.zeros(len(area))
-            loc_thpv = theta_pv[iti, lev, :, :]
-            loc_lat = np.zeros(loc_thpv.shape, dtype="i8")
-            loc_lat.swapaxes(0, 1)[:] = range(len(latc))
-            loc_lat = loc_lat.reshape(-1)
-            thpv_list = loc_thpv.reshape(-1)
-            notnanpv = ~(np.isnan(thpv_list))
-            if len(thpv_list[notnanpv]) == 0:
-                theta_eqlat[iti, lev, :, :] = np.nan
-                continue
-            missing_area = area[loc_lat[np.isnan(thpv_list)]].sum()
-            areas = baseareas.copy()
-            missing_fac = (areas[-1] - missing_area) / areas[-1]
-            if missing_fac < 0.99:
-                areas *= missing_fac
-                print("\nWARNING")
-                print("    'Fixing' area due to nan in PV at theta ", thetagrid[lev], end=' ')
-                print("by a factor of ", missing_fac)
-
-            minpv, maxpv = thpv_list[notnanpv].min(), thpv_list[notnanpv].max()
-
-            thpv_list = sorted(zip(-thpv_list[notnanpv], loc_lat[notnanpv]))
-
-            aind_lat = np.asarray([x[1] for x in thpv_list], dtype="i8")
-            apv = np.asarray([x[0] for x in thpv_list])[:-1]
-            cum_areas = np.cumsum(area[aind_lat])[1:]
-            if len(cum_areas) >= 2:
-                pv_limits = np.interp(areas, cum_areas, apv)
-
-                pv_limits[0], pv_limits[-1] = -maxpv, -minpv
-                loc_eqlat = np.interp(-loc_thpv, pv_limits, latc)
-                theta_eqlat[iti, lev, :, :] = loc_eqlat
-            else:
-                print("\nWARNING")
-                print("    Filling one level to NaN due to missing PV values")
-                theta_eqlat[iti, lev, :, :] = np.nan
-
-    # convert pv back to model grid
-    for iti, ilo, ila in tqdm.tqdm(
-            itertools.product(range(eqlat.shape[0]), range(eqlat.shape[3]), range(eqlat.shape[2])),
-            total=eqlat.shape[0] * eqlat.shape[3] * eqlat.shape[2], ascii=True,
-            desc="Interpolation back to model levels:"):
-        lp = np.log(theta[iti, :, ila, ilo])
-        eqlat[iti, :, ila, ilo] = np.interp(
-            lp, log_thetagrid, theta_eqlat[iti, :, ila, ilo],
-            left=np.nan, right=np.nan)
-    if reverse:
-        eqlat = eqlat[:, ::-1]
-    get_create_variable(ncin, "EQLAT")[:] = eqlat
-
-
-def add_surface(ncin, typ, levels):
-    """
-    This function takes PV and hor. Wind from a model and adds a variable where
-    these entities are interpolated on the given horizontal hPa planes.
-    """
-
-    if levels is None:
-        return
-    for p in [int(x) for x in levels.split(":")]:
-        print("Adding PV, UV on", typ, "level", p)
-        pv = ncin.variables["pv"][:]
-        if typ == "pressure":
-            vert = ncin.variables["pressure"][:]/100
-        elif typ == "pt":
-            vert = ncin.variables["pt"][:]
-        else:
-            vert = ncin.variables[typ][:]
-        u = ncin.variables["u"][:]
-        v = ncin.variables["v"][:]
-        pv_surf = np.zeros((pv.shape[0], pv.shape[2], pv.shape[3]))
-        uv_surf = np.zeros(pv_surf.shape)
-        uv = np.sqrt(u ** 2 + v ** 2)
-
-        if vert[0, 0, 0, 0] < vert[0, -1, 0, 0]:
-            order = 1
-        else:
-            order = -1
-
-        for iti, ilo, ila in tqdm.tqdm(
-                itertools.product(range(pv.shape[0]), range(pv.shape[3]), range(pv.shape[2])),
-                total=pv.shape[0] * pv.shape[3] * pv.shape[2], ascii=True,
-                desc="Interpolation to {} level {}".format(typ, p)):
-            uv_surf[iti, ila, ilo] = np.interp(
-                [p], vert[iti, ::order, ila, ilo], uv[iti, ::order, ila, ilo],
-                left=np.nan, right=np.nan)
-            pv_surf[iti, ila, ilo] = np.interp(
-                [p], vert[iti, ::order, ila, ilo], pv[iti, ::order, ila, ilo],
-                left=np.nan, right=np.nan)
-
-        get_create_variable(ncin, "%s_SURFACE_%04d_UV" % (typ, p))[:] = uv_surf
-        get_create_variable(ncin, "%s_SURFACE_%04d_PV" % (typ, p))[:] = pv_surf
 
 
 def add_tropopauses(ncin):
@@ -410,10 +233,11 @@ def add_metpy(option, filename):
             xin["pv"] = potential_vorticity_baroclinic(xin["pt"], xin["pressure"], xin["u"], xin["v"])
             xin["pv"].data = np.array(xin["pv"].data * 10 ** 6)
             xin = xin.drop("metpy_crs")
-            xin["pv"].attrs["units"] = "kelvin * meter ** 2 / kilogram / second"
+            xin["pv"].attrs["units"] = VARIABLES["pv"][1]
             xin["pv"].attrs["standard_name"] = VARIABLES["pv"][2]
             xin["mod_pv"] = xin["pv"] * ((xin["pt"] / 360) ** (-4.5))
             xin["mod_pv"].attrs["standard_name"] = VARIABLES["mod_pv"][2]
+            xin["mod_pv"].attrs["units"] = VARIABLES["mod_pv"][1]
         if option.n2:
             print("Adding N2...")
             xin["n2"] = brunt_vaisala_frequency_squared(geopotential_to_height(xin["zh"]), xin["pt"])
@@ -436,12 +260,6 @@ def add_rest(option, filename):
             history += "\n" + ncin.history
         ncin.history = history
         ncin.date_modified = datetime.datetime.now().isoformat()
-
-        if option.eqlat:
-            add_eqlat(ncin)
-
-        add_surface(ncin, "pressure", option.surface_pressure)
-        add_surface(ncin, "pt", option.surface_theta)
 
         if option.tropopause:
             add_tropopauses(ncin)

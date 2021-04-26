@@ -1,5 +1,9 @@
 #!/bin/bash
-# Limit maximum threads to avoid potential issues
+#Copyright (C) 2021 by Forschungszentrum Juelich GmbH
+#Author(s): Joern Ungermann, May Baer
+
+
+# Limit maximum threads to a reasonable number on large multi-core computers to avoid potential issues
 export OMP_NUM_THREADS=4
 export MKL_NUM_THREADS=${OMP_NUM_THREADS}
 export NUMEXPR_NUM_THREADS=${OMP_NUM_THREADS}
@@ -45,18 +49,22 @@ ncatted -a units,time,o,c,"${time_units}" $sfcfile
 cdo merge $sfcfile $mlfile $tmpfile
 mv $tmpfile $mlfile
 
-# Change weird cdo names
-ncrename -h -O -v .var3,pt -v .var54,pres -v .var129,z -v .var131,u -v .var132,v -v .var133,q -v .var203,o3 $pvfile
-ncrename -h -O -v .var54,pres -v .var60,pv -v .var131,u -v .var132,v -v .var133,q -v .var155,d -v .var203,o3 $tlfile
-ncrename -h -O -v .var129,z -v .var151,msl -v .var165,10u -v .var166,10v -v .var186,lcc -v .var187,mcc -v .var188,hcc $mlfile
+ncatted -O -a standard_name,cc,o,c,cloud_area_fraction_in_atmosphere_layer \
+           -a standard_name,o3,o,c,mole_fraction_of_ozone_in_air \
+           -a standard_name,ciwc,o,c,specific_cloud_ice_water_content \
+           -a standard_name,clwc,o,c,specific_cloud_liquid_water_content \
+           -a units,cc,o,c,dimensionless $mlfile
 
-ncatted -O -a standard_name,msl,o,c,air_pressure_at_sea_level $sfcfile
+# Change weird cdo names
+ncrename -h -O -v .var3,pt -v .var54,presure -v .var129,z -v .var131,u -v .var132,v -v .var133,q -v .var203,o3 $pvfile
+ncrename -h -O -v .var54,pressure -v .var60,pv -v .var131,u -v .var132,v -v .var133,q -v .var155,d -v .var203,o3 $tlfile
+ncrename -h -O -v .var129,z -v .var151,msl -v .var165,10u -v .var166,10v -v .var186,lcc -v .var187,mcc -v .var188,hcc $mlfile
 
 # Add pressure and geopotential height to model levels file
 ./bin/add_pressure_gph.sh input=$mlfile pressure_units=Pa gph_units="m^2s^-2"
 
 # Add ancillary information
-python3 ./bin/add_ancillary.py $mlfile --pv --theta --tropopause --n2 #--eqlat nan values cause issues for now due to no 180° coverage
+python3 ./bin/add_ancillary.py $mlfile --pv --theta --tropopause --n2
 
 # separate sfc from ml variables
 ncks -7 -L 7 -C -O -x -vlev,n2,clwc,u,q,t,pressure,zh,cc,w,v,ciwc,pt,pv,mod_pv,o3,d $mlfile $sfcfile
@@ -75,15 +83,18 @@ ncks -7 -L 7 -C -O -x -v lev,sp,lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $plfile $plfi
 echo "Creating potential temperature level file..."
 python3 ./bin/interpolate_missing_variables.py $mlfile $tlfile pt
 python3 bin/rename_standard.py $mlfile $tlfile
+ncap2 -s "pv*=1000000" $tlfile $tlfile-tmp
+mv $tlfile-tmp $tlfile
 ncatted -O -a standard_name,lev,o,c,atmosphere_potential_temperature_coordinate $tlfile
-ncatted -O -a standard_name,pv,o,c,ertel_potential_vorticity $tlfile
 ncks -O -7 -L 7 $tlfile $tlfile
 
 echo "Creating potential vorticity level file..."
+ncap2 -s "lev/=1000" $pvfile $pvfile-tmp
+mv $pvfile-tmp $pvfile
 python3 ./bin/interpolate_missing_variables.py $mlfile $pvfile pv
 python3 bin/rename_standard.py $mlfile $pvfile
 ncatted -O -a standard_name,lev,o,c,atmosphere_ertel_potential_vorticity_coordinate $pvfile
-ncatted -O -a units,lev,o,c,"kelvin * meter ** 2 / kilogram / second" $pvfile
+ncatted -O -a units,lev,o,c,"m^2 K s^-1 kg^-1 10E-6" $pvfile
 ncks -O -7 -L 7 $pvfile $pvfile
 
 echo "Creating altitude level file..."
@@ -97,9 +108,7 @@ rm $tmpfile
 
 # model/surface levels
 ncks -O -d lev,0,0 -d lev,16,28,4 -d lev,32,124,2 $mlfile $tmpfile
-rm $mlfile
-nccopy -s -d7 $tmpfile $mlfile
-rm $tmpfile
+mv $tmpfile $mlfile
 ncatted -O -a standard_name,lev,o,c,atmosphere_hybrid_sigma_pressure_coordinate $mlfile
 ncks -7 -L 7 -C -O -x -v lev_2,sp,lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $mlfile $mlfile
 

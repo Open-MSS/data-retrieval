@@ -1,5 +1,9 @@
+"""
+Copyright (C) 2021 by Forschungszentrum Juelich GmbH
+Author(s): May Baer
+"""
+
 import xarray as xr
-import numpy as np
 import sys
 
 

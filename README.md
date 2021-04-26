@@ -10,8 +10,8 @@ Call the association "MSS-Data-Transfer" and set up your SFTP/FTP Server to your
 # Scripts Setup
 1. Clone this repository and move into it
 ```
-git clone https://github.com/Marilyth/mss-data-retrieval.git
-cd mss-data-retrieval
+git clone https://github.com/Open-MSS/data-retrieval.git
+cd data-retrieval
 git checkout ecgate-forecast
 ```
 2. Make the shell scripts executable

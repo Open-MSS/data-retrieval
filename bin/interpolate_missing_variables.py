@@ -1,3 +1,8 @@
+"""
+Copyright (C) 2021 by Forschungszentrum Juelich GmbH
+Author(s): May Baer
+"""
+
 from metpy.interpolate import interpolate_1d
 import xarray as xr
 import numpy as np
@@ -18,7 +23,6 @@ def interpolate_vertical(ml_file, inter_file, new_vertical_axis):
                     x = np.array(ml[new_vertical_axis].data)
                     y = np.array(ml[variable].data)
                     interpolated_data = interpolate_1d(interpolated["lev"].data, x, y, axis=1)
-                    attributes = ml[variable].attrs
 
                     interpolated[variable] = interpolated[reference].copy(data=interpolated_data)
                     interpolated[variable].attrs = ml[variable].attrs
@@ -27,9 +31,7 @@ def interpolate_vertical(ml_file, inter_file, new_vertical_axis):
         interpolated.to_netcdf(inter_file)
 
 
-
 ml = sys.argv[1]
 inter_file = sys.argv[2]
 vertical_axis = sys.argv[3]
 interpolate_vertical(ml, inter_file, vertical_axis)
-
