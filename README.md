@@ -20,15 +20,15 @@ Scripts Setup
 2. Make the shell scripts executable
 
        chmod +x ./bin/*.sh
-
-3. Install all requirements
-
-       pip --user -r install requirements.txt
-
-4. Create a .bashrc for paths
+       
+3. Create a .bashrc for paths
 
        cat .bashrc > ~/.bashrc
        source ~/.bashrc
+
+4. Install all requirements
+
+       pip3 install --user -r requirements.txt
 
 Usage
 =====
