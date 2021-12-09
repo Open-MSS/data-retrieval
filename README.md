@@ -7,7 +7,8 @@ ECTrans Setup
 1. Login at https://ecaccess.ecmwf.int/ecmwf/ \
    Go to https://ecaccess.ecmwf.int/ecmwf/gateway/ECtrans/Setup
 2. Click "Add association" at the bottom of the page \
-   Call the association "MSS-Data-Transfer" and set up your SFTP/FTP Server to your liking
+   Call the association "MSS-Data-Transfer" and set up your SFTP/FTP Server to your liking \
+   If you want to call it something else, make sure to change `ectrans_id` inside the `settings.config`
 
 Scripts Setup
 =============
@@ -29,6 +30,8 @@ Scripts Setup
 4. Install all requirements
 
        pip3 install --user -r requirements.txt
+       
+5. Adjust the settings.config to your liking
 
 Usage
 =====

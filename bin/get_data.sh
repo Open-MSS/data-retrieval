@@ -2,7 +2,6 @@
 #Copyright (C) 2021 by Forschungszentrum Juelich GmbH
 #Author(s): Joern Ungermann, May Baer
 
-
 # Limit maximum threads to a reasonable number on large multi-core computers to avoid potential issues
 export OMP_NUM_THREADS=4
 export MKL_NUM_THREADS=${OMP_NUM_THREADS}
@@ -13,10 +12,11 @@ export VECLIB_MAXIMUM_THREADS=${OMP_NUM_THREADS}
 # Set path, filenames and variables used later in the script
 export WORK="$(dirname $0)/.."
 cd $WORK
+. settings.config
 export DATE=$1
 export TIME=$2
 export STEP=$3
-export BASE=${DATE}T${TIME}.fc
+export BASE=${DATE}T${TIME}S${STEP////-}.fc
 export GRIB=grib/${BASE}.grib
 export mlfile=mss/${BASE}.ml.nc
 export plfile=mss/${BASE}.pl.nc
@@ -114,13 +114,13 @@ ncks -7 -L 7 -C -O -x -v lev_2,sp,lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $mlfile $ml
 
 echo "Done, your netcdf files are located at $(pwd)/mss"
 
-if ecaccess-association-list | grep -q 'MSS-Data-Transfer'; then
-  echo "Transfering files to MSS-Data-Transfer"
-  ectrans -remote MSS-Data-Transfer -source $mlfile &
-  ectrans -remote MSS-Data-Transfer -source $tlfile &
-  ectrans -remote MSS-Data-Transfer -source $plfile &
-  ectrans -remote MSS-Data-Transfer -source $pvfile &
-  ectrans -remote MSS-Data-Transfer -source $alfile &
-  ectrans -remote MSS-Data-Transfer -source $sfcfile
+if ecaccess-association-list | grep -q $ectrans_id; then
+  echo "Transfering files to $ectrans_id"
+  ectrans -remote $ectrans_id -source $mlfile &
+  ectrans -remote $ectrans_id -source $tlfile &
+  ectrans -remote $ectrans_id -source $plfile &
+  ectrans -remote $ectrans_id -source $pvfile &
+  ectrans -remote $ectrans_id -source $alfile &
+  ectrans -remote $ectrans_id -source $sfcfile
   wait
 fi
