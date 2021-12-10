@@ -29,6 +29,8 @@ Scripts Setup
    e.g. for Ubuntu/Debian
 
        sudo apt-get install cdo nco netcdf-bin
+       
+5. Adjust the settings.config to your liking
 
 Usage
 =====

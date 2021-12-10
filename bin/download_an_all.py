@@ -13,6 +13,8 @@ import cdsapi
 parser = argparse.ArgumentParser()
 parser.add_argument("date", help="The date in YYYY-MM-DD format")
 parser.add_argument("time", help="The time in HH:MM:SS format")
+parser.add_argument("area", help="The area in North/West/South/East format")
+parser.add_argument("grid", help="The resolution of the data in longitude/latitude format")
 args = parser.parse_args()
 
 c_ml = cdsapi.Client()
@@ -27,8 +29,8 @@ request = {
         'expver': '1',
         'stream': 'oper',
         'type': 'an',
-        "area": "0/0/-80/360",
-        "grid": "1.0/1.0",
+        "area": args.area,
+        "grid": args.grid,
     }
 
 
