@@ -2,8 +2,6 @@
 #Copyright (C) 2021 by Forschungszentrum Juelich GmbH
 #Author(s): May Baer
 
-cd $WORK
-. settings.config
 
 if [ ! -f grib/${BASE}.ml.grib ]; then
     mars <<EOF
