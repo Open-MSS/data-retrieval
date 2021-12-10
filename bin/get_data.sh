@@ -13,6 +13,7 @@ export VECLIB_MAXIMUM_THREADS=${OMP_NUM_THREADS}
 # Set path, filenames and variables used later in the script
 export WORK="$(dirname $0)/.."
 cd $WORK
+. settings.config
 export DATE=$1
 export TIME=$2
 export BASE=${DATE}T${TIME}.an
@@ -34,7 +35,7 @@ export time_units="hours since ${init_date}"
 
 # Download ml, sfc, pv and pt files
 echo "Downloading files, this might take a long time!"
-python bin/download_an_all.py $DATE $TIME
+python bin/download_an_all.py $DATE $TIME $area $grid
 
 if [ ! -f grib/${BASE}.ml.grib ]; then
    echo	FATAL `date` Model level file is missing
