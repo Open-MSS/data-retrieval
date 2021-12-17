@@ -29,12 +29,25 @@ mkdir -p grib
 # get forecast date
 echo Date: $MSJ_YEAR $MSJ_MONTH $MSJ_DAY
 echo BASETIME, STEP:  $MSJ_BASETIME $MSJ_STEP
-DAY=$MSJ_DAY
-MONTH=$MSJ_MONTH
-YEAR=$MSJ_YEAR
-HH=$MSJ_BASETIME
 
-FCSTEP=${MSJ_STEP:1:3}
+if [[ $MSJ_YEAR == "" ]]
+then
+    HH=00
+    DAY=`date +%d`
+    MONTH=`date +%m`
+    YEAR=`date +%Y`
+    STEP=0/to/36/by/6
+    FSTEP=036
+    FCSTEP=0
+else    
+   
+    DAY=$MSJ_DAY
+    MONTH=$MSJ_MONTH
+    YEAR=$MSJ_YEAR
+    HH=$MSJ_BASETIME
+    FCSTEP=${MSJ_STEP:1:3}
+fi
+
 case $FCSTEP in
     036)
 	STEP=0/to/36/by/6
@@ -46,19 +59,19 @@ case $FCSTEP in
 	STEP=78/to/144/by/6
 	;;
     *)
-	STEP=0
-	FCSTEP=000
+	FCSTEP=$FSTEP
 esac
 
-export area=0/0/-80/360
+export area=70/160/0/260
 export grid=1.0/1.0
 ectrans_id=data2_df8
 
 # Set path, filenames and variables used later in the script
 export DATE=${YEAR}-${MONTH}-${DAY}
+export YMD=${YEAR}${MONTH}${DAY}
 export TIME=${HH}:00:00
 export STEP=${STEP}
-export BASE=${DATE}T${TIME:0:2}.${FCSTEP}.fc
+export BASE=ecmwf_${YMD}_${HH}.${FCSTEP}
 export GRIB=grib/${BASE}.grib
 export mlfile=mss/${BASE}.ml.nc
 export plfile=mss/${BASE}.pl.nc
@@ -157,7 +170,7 @@ ncks -7 -L 7 -C -O -x -v lev_2,sp,lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $mlfile $ml
 echo "Done, your netcdf files are located at $(pwd)/mss"
 
 if ecaccess-association-list | grep -q $ectrans_id; then
-  echo "Transfering files to MSS-Data-Transfer"
+  echo "Transfering files to "$ectrans_id 
   ectrans -verbose -remote $ectrans_id -source $mlfile -target $mlfile -overwrite -remove 
   ectrans -verbose -remote $ectrans_id -source $tlfile -target $tlfile -overwrite -remove 
   ectrans -verbose -remote $ectrans_id -source $plfile -target $plfile -overwrite -remove 
