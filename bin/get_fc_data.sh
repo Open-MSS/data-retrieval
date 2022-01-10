@@ -1,4 +1,5 @@
 #!/bin/bash
+
 #Copyright (C) 2021 by Forschungszentrum Juelich GmbH
 #Author(s): Joern Ungermann, May Baer, Jens-Uwe Grooss
 
@@ -8,9 +9,10 @@
 #SBATCH --output=get_fc_data.%j.out
 #SBATCH --error=get_fc_data.%j.out
 
-module load python3
-module load nco
 module load cdo
+PATH=/home/ms/datex/df8/mambaforge/bin/:$PATH
+conda activate ncenv
+
 
 # Limit maximum threads to a reasonable number on large multi-core computers to avoid potential issues
 export OMP_NUM_THREADS=4
@@ -92,14 +94,18 @@ export time_units="hours since ${init_date}"
 $SRCDIR/download_an_all.sh $DATE $TIME $STEP
 
 # convert grib to netCDF, set init time
-cdo -f nc4c copy grib/${BASE}.tl.grib $tlfile
+cdo -f nc4c -t ecmwf copy grib/${BASE}.tl.grib $tlfile
 ncatted -a units,time,o,c,"${time_units}" $tlfile
-cdo -f nc4c copy grib/${BASE}.pv.grib $pvfile
+ncrename -h -O -v PRES,pressure -v PV,pv -v Q,q -v D,d -v U,u -v V,v -v O3,o3 $tlfile
+cdo -f nc4c -t ecmwf copy grib/${BASE}.pv.grib $pvfile
 ncatted -a units,time,o,c,"${time_units}" $pvfile
-cdo -f nc4c copy grib/${BASE}.ml.grib $mlfile
+ncrename -h -O -v PT,pt -v PRES,pressure -v U,u -v V,v -v Q,q -v O3,o3 $pvfile
+cdo -f nc4c -t ecmwf copy grib/${BASE}.ml.grib $mlfile
 ncatted -a units,time,o,c,"${time_units}" $mlfile
-cdo -f nc4c copy grib/${BASE}.sfc.grib $sfcfile
+cdo -f nc4c -t ecmwf copy grib/${BASE}.sfc.grib $sfcfile
 ncatted -a units,time,o,c,"${time_units}" $sfcfile
+ncrename -h -O -v Z,z -v MSL,msl -v U10M,u10m -v V10M,v10m -v LCC,lcc -v MCC,mcc -v HCC,hcc $sfcfile
+
 
 cdo merge $sfcfile $mlfile $tmpfile
 mv $tmpfile $mlfile
@@ -109,11 +115,6 @@ ncatted -O -a standard_name,cc,o,c,cloud_area_fraction_in_atmosphere_layer \
            -a standard_name,ciwc,o,c,specific_cloud_ice_water_content \
            -a standard_name,clwc,o,c,specific_cloud_liquid_water_content \
            -a units,cc,o,c,dimensionless $mlfile
-
-# Change weird cdo names
-ncrename -h -O -v .var3,pt -v .var54,presure -v .var129,z -v .var131,u -v .var132,v -v .var133,q -v .var203,o3 $pvfile
-ncrename -h -O -v .var54,pressure -v .var60,pv -v .var131,u -v .var132,v -v .var133,q -v .var155,d -v .var203,o3 $tlfile
-ncrename -h -O -v .var129,z -v .var151,msl -v .var165,10u -v .var166,10v -v .var186,lcc -v .var187,mcc -v .var188,hcc $mlfile
 
 # Add pressure and geopotential height to model levels file
 $SRCDIR/add_pressure_gph.sh input=$mlfile pressure_units=Pa gph_units="m^2s^-2"
