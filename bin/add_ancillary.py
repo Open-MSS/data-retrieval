@@ -18,8 +18,8 @@ import tqdm
 VARIABLES = {
     "pressure": ("FULL", "hPa", "air_pressure", "Pressure"),
     "pt": ("FULL", "K", "air_potential_temperature", "Potential Temperature"),
-    "pv": ("FULL", "um^2 K s^-1 kg^-1", "ertel_potential_vorticity", "Potential Vorticity"),
-    "mod_pv": ("FULL", "um^2 K s^-1 kg^-1", "", "Modified Potential Vorticity"),
+    "pv": ("FULL", "uK m^2 kg^-1 s^-1", "ertel_potential_vorticity", "Potential Vorticity"),
+    "mod_pv": ("FULL", "uK m^2 kg^-1 s^-1", "", "Modified Potential Vorticity"),
     "zh": ("FULL", "km", "geopotential_height", "Geopotential Altitude"),
     "n2": ("FULL", "s^-2", "square_of_brunt_vaisala_frequency_in_air", "N^2"),
     "TROPOPAUSE": ("HORIZONTAL", "km", "tropopause_altitude",
