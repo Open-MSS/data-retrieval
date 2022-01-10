@@ -8,6 +8,7 @@ import optparse
 import os
 import sys
 from metpy.calc import potential_temperature, potential_vorticity_baroclinic, brunt_vaisala_frequency_squared, geopotential_to_height
+from metpy.units import units
 import xarray as xr
 
 import netCDF4
@@ -126,16 +127,14 @@ def find_tropopause(alts, temps):
 
 def parse_args(args):
     oppa = optparse.OptionParser(usage="""
-    add_pv.py
+    add_ancillary.py
 
     Adds PV and ancillary quantities to 4D model data given as NetCDF.
-    Supported model types are ECMWFP (ECMWF on pressure levels), ECMWFZ
-    (JURASSIC ECMWF format on altitude levels), FNL, WACCM.
 
-    Usage: add_pv.py [options] <model type> <netCDF file>
+    Usage: add_pv.py [options] <netCDF file>
 
     Example:
-    add_pv.py ECMWFP ecmwfr_ana_ml_06072912.nc
+    add_pv.py ecmwfr_ana_ml_06072912.nc
     """)
 
     oppa.add_option('--theta', '', action='store_true',
@@ -163,10 +162,14 @@ def add_tropopauses(ncin):
     """
     print("Adding first and second tropopause")
 
-    temp = ncin.variables["t"][:]
-    press = ncin.variables["pressure"][:]/100
-    gph = ncin.variables["zh"][:]
-    theta = ncin.variables["pt"][:]
+    temp = (units(ncin.variables["t"].units) *
+            ncin.variables["t"][:]).to("K").m
+    press = (units(ncin.variables["pressure"].units) *
+             ncin.variables["pressure"][:]).to("hPa").m
+    gph = geopotential_to_height(
+        units(ncin.variables["zh"].units) * ncin.variables["zh"][:]).to("km").m
+    theta = (units(ncin.variables["pt"].units) *
+             ncin.variables["pt"][:]).to("K").m
 
     if gph[0, 1, 0, 0] < gph[0, 0, 0, 0]:
         gph = gph[:, ::-1, :, :]
