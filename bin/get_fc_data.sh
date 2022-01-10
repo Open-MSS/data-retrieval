@@ -10,6 +10,7 @@
 #SBATCH --error=get_fc_data.%j.out
 
 module load cdo
+. /home/ms/datex/df8/mambaforge/etc/profile.d/conda.sh
 PATH=/home/ms/datex/df8/mambaforge/bin/:$PATH
 conda activate ncenv
 
