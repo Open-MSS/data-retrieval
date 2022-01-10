@@ -107,6 +107,14 @@ cdo -f nc4c -t ecmwf copy grib/${BASE}.sfc.grib $sfcfile
 ncatted -a units,time,o,c,"${time_units}" $sfcfile
 ncrename -h -O -v Z,z -v MSL,msl -v U10M,u10m -v V10M,v10m -v LCC,lcc -v MCC,mcc -v HCC,hcc $sfcfile
 
+ncatted -O -a standard_name,lcc,o,c,low_cloud_area_fraction \
+           -a standard_name,mcc,o,c,medium_cloud_area_fraction \
+           -a standard_name,hcc,o,c,high_cloud_area_fraction \
+           -a standard_name,u10m,o,c,surface_eastward_wind \
+	   -a standard_name,v10m,o,c,surface_northward_wind \
+           -a units,lcc,o,c,1 \
+           -a units,mcc,o,c,1 \
+           -a units,hcc,o,c,1 $sfcfile
 
 cdo merge $sfcfile $mlfile $tmpfile
 mv $tmpfile $mlfile
@@ -126,6 +134,11 @@ python3 $SRCDIR/add_ancillary.py $mlfile --pv --theta --tropopause --n2
 # separate sfc from ml variables
 ncks -7 -L 7 -C -O -x -vlev,n2,clwc,u,q,t,pressure,zh,cc,w,v,ciwc,pt,pv,mod_pv,o3,d $mlfile $sfcfile
 ncatted -O -a standard_name,msl,o,c,air_pressure_at_sea_level $sfcfile
+
+# delete hybrid model level def from sfc file??
+ncks -7 -L 7 -C -O -x -v hyai,hyam,hybi,hybm $sfcfile $tmpfile
+mv $tmpfile $sfcfile
+
 ncks -C -O -vtime,lev,lon,lat,n2,clwc,u,q,t,pressure,zh,cc,w,v,ciwc,pt,pv,mod_pv,o3,d,hyai,hyam,hybi,hybm,sp,lnsp $mlfile $tmpfile
 mv $tmpfile $mlfile
 
