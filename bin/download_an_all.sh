@@ -14,7 +14,7 @@ if [ ! -f grib/${BASE}.ml.grib ]; then
     class=od,
     levelist=1/to/137,
     levtype=ml,
-    param=130.128/131.128/132.128/133.128/135.128/152.128/155.128/203.128/246.128/247.128/248.128,
+    param=130.128/131.128/132.128/133.128/135.128/152.128/155.128/203.128/246.128/247.128/248.128/129.128,
     stream=oper,
     type=fc,
     target="grib/${BASE}.ml.grib"
@@ -30,7 +30,7 @@ if [ ! -f grib/${BASE}.sfc.grib ]; then
     grid=$grid,
     class=od,
     levtype=sfc,
-    param=129.128/151.128/165.128/166.128/186.128/187.128/188.128,
+    param=151.128/165.128/166.128/186.128/187.128/188.128,
     stream=oper,
     type=fc,
     target="grib/${BASE}.sfc.grib"
