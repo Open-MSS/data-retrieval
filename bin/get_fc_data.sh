@@ -9,29 +9,31 @@
 #SBATCH --output=get_fc_data.%j.out
 #SBATCH --error=get_fc_data.%j.out
 
+
+# This script works with the cdo version installed on ECACCESS and 
+# in an mambaforge environment ncenv that includes cartopy (0.20.1), metpy (1.1.0)
+# nco (5.0.4), netcdf4 (1.5.8), scipy (1.7.3) and xarray (0.20.2)
+
 module load cdo
-. /home/ms/datex/df8/mambaforge/etc/profile.d/conda.sh
-PATH=/home/ms/datex/df8/mambaforge/bin/:$PATH
+. $HOME/mambaforge/etc/profile.d/conda.sh
 conda activate ncenv
 
 
-# Limit maximum threads to a reasonable number on large multi-core computers to avoid potential issues
-export OMP_NUM_THREADS=4
-export MKL_NUM_THREADS=${OMP_NUM_THREADS}
-export NUMEXPR_NUM_THREADS=${OMP_NUM_THREADS}
-export OPENBLAS_NUM_THREADS=${OMP_NUM_THREADS}
-export VECLIB_MAXIMUM_THREADS=${OMP_NUM_THREADS}
+# Define model domain sector, resolution and id name for ectrans
+export area=70/160/0/260
+export grid=1.0/1.0
+export ectrans_id=data2_df8
 
-SRCDIR=$HOME/data-retrieval/bin
-WORKDIR=$SCRATCH
-cd $WORKDIR
-mkdir -p mss
-mkdir -p grib
-
+# Delete grib and nc files after transfer
+cleanup=yes
 
 # get forecast date
-echo Date: $MSJ_YEAR $MSJ_MONTH $MSJ_DAY
-echo BASETIME, STEP:  $MSJ_BASETIME $MSJ_STEP
+# If used as a shell script that is run on a event trigger,
+# the $MSJ* environment variables contain the corresponding time info.
+# This can be done from the web interface or e.g. by the command
+#    ecaccess-job-submit -ni fc00h036 get_fc_data.sh
+# If these variables are empty, a pre-defined forecast of today is run.
+
 
 if [[ $MSJ_YEAR == "" ]]
 then
@@ -43,6 +45,8 @@ then
     FSTEP=036
     FCSTEP=0
 else    
+    echo Date: $MSJ_YEAR $MSJ_MONTH $MSJ_DAY
+    echo BASETIME, STEP:  $MSJ_BASETIME $MSJ_STEP
    
     DAY=$MSJ_DAY
     MONTH=$MSJ_MONTH
@@ -65,9 +69,14 @@ case $FCSTEP in
 	FCSTEP=$FSTEP
 esac
 
-export area=70/160/0/260
-export grid=1.0/1.0
-ectrans_id=data2_df8
+
+# write data to the $SCRATCH directory with more available disk quota
+SRCDIR=$HOME/data-retrieval/bin
+WORKDIR=$SCRATCH
+cd $WORKDIR
+mkdir -p mss
+mkdir -p grib
+
 
 # Set path, filenames and variables used later in the script
 export DATE=${YEAR}-${MONTH}-${DAY}
@@ -75,7 +84,6 @@ export YMD=${YEAR}${MONTH}${DAY}
 export TIME=${HH}:00:00
 export STEP=${STEP}
 export BASE=ecmwf_${YMD}_${HH}.${FCSTEP}
-export GRIB=grib/${BASE}.grib
 export mlfile=mss/${BASE}.ml.nc
 export plfile=mss/${BASE}.pl.nc
 export alfile=mss/${BASE}.al.nc
@@ -94,7 +102,7 @@ export time_units="hours since ${init_date}"
 # Retrieve ml, sfc, pv and pt files
 $SRCDIR/download_an_all.sh $DATE $TIME $STEP
 
-# convert grib to netCDF, set init time
+# Convert grib to netCDF, set init time
 cdo -f nc4c -t ecmwf copy grib/${BASE}.tl.grib $tlfile
 ncatted -a units,time,o,c,"${time_units}" $tlfile
 ncrename -h -O -v PRES,pressure -v PV,pv -v Q,q -v D,d -v U,u -v V,v -v O3,o3 $tlfile
@@ -104,8 +112,7 @@ ncrename -h -O -v PT,pt -v PRES,pressure -v U,u -v V,v -v Q,q -v O3,o3 $pvfile
 cdo -f nc4c -t ecmwf copy grib/${BASE}.ml.grib $mlfile
 ncatted -a units,time,o,c,"${time_units}" $mlfile
 cdo -f nc4c -t ecmwf copy grib/${BASE}.sfc.grib $sfcfile
-ncatted -a units,time,o,c,"${time_units}" $sfcfile
-ncrename -h -O -v Z,z -v MSL,msl -v U10M,u10m -v V10M,v10m -v LCC,lcc -v MCC,mcc -v HCC,hcc $sfcfile
+ncrename -h -O -v MSL,msl -v U10M,u10m -v V10M,v10m -v LCC,lcc -v MCC,mcc -v HCC,hcc $sfcfile
 
 ncatted -O -a standard_name,lcc,o,c,low_cloud_area_fraction \
            -a standard_name,mcc,o,c,medium_cloud_area_fraction \
@@ -128,21 +135,23 @@ ncatted -O -a standard_name,cc,o,c,cloud_area_fraction_in_atmosphere_layer \
 # Add pressure and geopotential height to model levels file
 $SRCDIR/add_pressure_gph.sh input=$mlfile pressure_units=Pa gph_units="m^2s^-2"
 
+echo add ancillary
 # Add ancillary information
 python3 $SRCDIR/add_ancillary.py $mlfile --pv --theta --tropopause --n2
 
-# separate sfc from ml variables
+echo separate sfc/ml
+# Separate sfc from ml variables
 ncks -7 -L 7 -C -O -x -vlev,n2,clwc,u,q,t,pressure,zh,cc,w,v,ciwc,pt,pv,mod_pv,o3,d $mlfile $sfcfile
 ncatted -O -a standard_name,msl,o,c,air_pressure_at_sea_level $sfcfile
 
-# delete hybrid model level def from sfc file??
+# Delete hybrid model level def from sfc file??
 ncks -7 -L 7 -C -O -x -v hyai,hyam,hybi,hybm $sfcfile $tmpfile
 mv $tmpfile $sfcfile
 
 ncks -C -O -vtime,lev,lon,lat,n2,clwc,u,q,t,pressure,zh,cc,w,v,ciwc,pt,pv,mod_pv,o3,d,hyai,hyam,hybi,hybm,sp,lnsp $mlfile $tmpfile
 mv $tmpfile $mlfile
 
-# interpolate to different grids
+# Interpolate to different grids
 echo "Creating pressure level file..."
 cdo ml2pl,85000,50000,40000,30000,20000,15000,12000,10000,8000,6500,5000,4000,3000,2000,1000,500,100 $mlfile $plfile
 ncatted -O -a standard_name,plev,o,c,atmosphere_pressure_coordinate $plfile
@@ -176,7 +185,7 @@ mv $alfile-tmp $alfile
 ncks -7 -L 7 -C -O -x -v lev,sp,lnsp $alfile $alfile
 rm $tmpfile
 
-# model/surface levels
+# Model/surface levels
 ncks -O -d lev,0,0 -d lev,16,28,4 -d lev,32,124,2 $mlfile $tmpfile
 mv $tmpfile $mlfile
 ncatted -O -a standard_name,lev,o,c,atmosphere_hybrid_sigma_pressure_coordinate $mlfile
@@ -192,8 +201,11 @@ if ecaccess-association-list | grep -q $ectrans_id; then
   ectrans -verbose -remote $ectrans_id -source $pvfile -target $pvfile -overwrite -remove 
   ectrans -verbose -remote $ectrans_id -source $alfile -target $alfile -overwrite -remove 
   ectrans -verbose -remote $ectrans_id -source $sfcfile -target $sfcfile -overwrite -remove
+fi
+
+if [[ $cleanup == "yes" ]]
+then
   # clean up locally
   rm -f $mlfile $tlfile $plfile $pvfile $alfile $sfcfile
   rm -f grib/${BASE}*.grib
-  wait
 fi
