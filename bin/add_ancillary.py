@@ -43,10 +43,17 @@ def get_create_variable(ncin, name):
     in case it is not yet present.
     """
     if name not in ncin.variables:
+        horizontal = False
         if name in VARIABLES:
             dim, units, standard_name, long_name = VARIABLES[name]
-        var_id = ncin.createVariable(name, "f4", ("time", "lev_2", "lat", "lon"),
-                                     **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
+            horizontal = (dim == "HORIZONTAL")
+  
+        if horizontal:
+            var_id = ncin.createVariable(name, "f4", ("time", "lat", "lon"),
+                                 **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
+        else:
+            var_id = ncin.createVariable(name, "f4", ("time", "lev_2", "lat", "lon"),
+                                 **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
         var_id.units = units
         var_id.long_name = long_name
         if standard_name:
