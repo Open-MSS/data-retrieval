@@ -1,7 +1,7 @@
 #!/bin/bash
 #Copyright (C) 2021 by Forschungszentrum Juelich GmbH
 #Author(s): Joern Ungermann, May Baer
-
+set -x
 
 # Limit maximum threads to a reasonable number on large multi-core computers to avoid potential issues
 export OMP_NUM_THREADS=4
@@ -13,6 +13,7 @@ export VECLIB_MAXIMUM_THREADS=${OMP_NUM_THREADS}
 # Set path, filenames and variables used later in the script
 export WORK="$(dirname $0)/.."
 cd $WORK
+pwd
 . settings.config
 export DATE=$1
 export TIME=$2
@@ -35,7 +36,7 @@ export time_units="hours since ${init_date}"
 
 # Download ml, sfc, pv and pt files
 echo "Downloading files, this might take a long time!"
-python bin/download_cds.py $DATE $TIME $area $grid
+# python bin/download_cds.py $DATE $TIME $area $grid
 
 if [ ! -f grib/${BASE}.ml.grib ]; then
    echo	FATAL `date` Model level file is missing
@@ -54,15 +55,20 @@ if [ ! -f grib/${BASE}.tl.grib ]; then
    exit
 fi
 
-cat grib/${BASE}.ml.grib grib/${BASE}.sfc.grib > ${GRIB}
-
 # convert grib to netCDF, set init time
-cdo -f nc4c copy grib/${BASE}.tl.grib $tlfile
+cdo -f nc4c -t ecmwf copy grib/${BASE}.tl.grib $tlfile
 ncatted -a units,time,o,c,"${time_units}" $tlfile
-cdo -f nc4c copy grib/${BASE}.pv.grib $pvfile
+cdo -f nc4c -t ecmwf copy grib/${BASE}.pv.grib $pvfile
 ncatted -a units,time,o,c,"${time_units}" $pvfile
-cdo -f nc4c copy ${GRIB} $mlfile
+cdo -f nc4c -t ecmwf copy grib/${BASE}.ml.grib $mlfile
 ncatted -a units,time,o,c,"${time_units}" $mlfile
+cdo -f nc4c -t ecmwf copy grib/${BASE}.sfc.grib $sfcfile
+
+#ncwa -a lev $sfcfile $tmpfile
+#mv $tmpfile $sfcfile
+
+cdo merge $sfcfile $mlfile $tmpfile
+mv $tmpfile $mlfile
 
 # Add pressure and geopotential height to model levels file
 bin/add_pressure_gph.sh input=$mlfile pressure_units=Pa gph_units="m^2s^-2"
@@ -71,9 +77,9 @@ bin/add_pressure_gph.sh input=$mlfile pressure_units=Pa gph_units="m^2s^-2"
 python bin/add_ancillary.py $mlfile --pv --theta --tropopause --n2
 
 # separate sfc from ml variables
-ncks -7 -L 7 -C -O -x -vlev_2,n2,clwc,u,q,t,pressure,zh,cc,w,v,ciwc,pt,pv,mod_pv,o3,d $mlfile $sfcfile
-ncatted -O -a standard_name,msl,o,c,air_pressure_at_sea_level $sfcfile
-ncks -C -O -vtime,lev_2,lon,lat,n2,clwc,u,q,t,pressure,zh,cc,w,v,ciwc,pt,pv,mod_pv,o3,d,hyai,hyam,hybi,hybm,sp,lnsp $mlfile $tmpfile
+ncks -7 -L 7 -C -O -x -vlev_2,n2,clwc,u,q,t,pressure,zh,cc,w,v,ciwc,pt,pv,o3,D $mlfile $sfcfile
+ncatted -O -a standard_name,MSL,o,c,air_pressure_at_sea_level $sfcfile
+ncks -C -O -vtime,lev_2,lon,lat,n2,clwc,u,q,t,pressure,zh,cc,w,v,ciwc,pt,pv,o3,d,hyai,hyam,hybi,hybm,lnsp $mlfile $tmpfile
 mv $tmpfile $mlfile
 ncatted -O -a standard_name,cc,o,c,cloud_area_fraction_in_atmosphere_layer \
            -a standard_name,o3,o,c,mole_fraction_of_ozone_in_air \
@@ -87,12 +93,12 @@ cdo ml2pl,85000,50000,40000,30000,20000,15000,12000,10000,8000,6500,5000,4000,30
 ncatted -O -a standard_name,plev,o,c,atmosphere_pressure_coordinate $plfile
 ncap2 -s "plev/=100;plev@units=\"hPa\"" $plfile $plfile-tmp
 mv $plfile-tmp $plfile
-ncks -7 -L 7 -C -O -x -v lev,sp,lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $plfile $plfile
+ncks -7 -L 7 -C -O -x -v lev,lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $plfile $plfile
 
 echo "Creating potential temperature level file..."
 python bin/interpolate_missing_variables.py $mlfile $tlfile pt
 python bin/rename_standard.py $mlfile $tlfile
-ncap2 -s "pv*=1000000" $tlfile $tlfile-tmp
+ncap2 -s "PV*=1000000" $tlfile $tlfile-tmp
 mv $tlfile-tmp $tlfile
 ncatted -O -a standard_name,lev,o,c,atmosphere_potential_temperature_coordinate $tlfile
 ncks -O -7 -L 7 $tlfile $tlfile
@@ -103,14 +109,14 @@ mv $pvfile-tmp $pvfile
 python bin/interpolate_missing_variables.py $mlfile $pvfile pv
 python bin/rename_standard.py $mlfile $pvfile
 ncatted -O -a standard_name,lev,o,c,atmosphere_ertel_potential_vorticity_coordinate $pvfile
-ncatted -O -a units,lev,o,c,"m^2 K s^-1 kg^-1 10E-6" $pvfile
+ncatted -O -a units,lev,o,c,"m^2 uK s^-1 kg^-1" $pvfile
 ncks -O -7 -L 7 $pvfile $pvfile
 
 echo "Creating altitude level file..."
 ncks -C -O -vtime,lev_2,lon,lat,n2,u,t,pressure,zh,w,v,pt,pv,hyai,hyam,hybi,hybm,lnsp $mlfile $tmpfile
 cdo ml2hl,$gph_levels $tmpfile $alfile
 ncatted -O -a standard_name,height,o,c,atmosphere_altitude_coordinate $alfile
-ncap2 -s "height@units=\"km\";height=height/1000" $alfile $alfile-tmp
+#ncap2 -s "height@units=\"km\";height=height/1000" $alfile $alfile-tmp
 mv $alfile-tmp $alfile
 ncks -7 -L 7 -C -O -x -v lev,sp,lnsp $alfile $alfile
 rm $tmpfile
@@ -119,6 +125,6 @@ rm $tmpfile
 ncks -O -d lev_2,0,0 -d lev_2,16,28,4 -d lev_2,32,124,2 $mlfile $tmpfile
 mv $tmpfile $mlfile
 ncatted -O -a standard_name,lev_2,o,c,atmosphere_hybrid_sigma_pressure_coordinate $mlfile
-ncks -7 -L 7 -C -O -x -v lev,sp,lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $mlfile $mlfile
+ncks -7 -L 7 -C -O -x -v lev,lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $mlfile $mlfile
 
 echo "Done, your netcdf files are located at $(pwd)/mss"

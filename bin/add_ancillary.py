@@ -16,11 +16,8 @@ import numpy as np
 import tqdm
 
 VARIABLES = {
-    "pressure": ("FULL", "hPa", "air_pressure", "Pressure"),
     "pt": ("FULL", "K", "air_potential_temperature", "Potential Temperature"),
     "pv": ("FULL", "uK m^2 kg^-1 s^-1", "ertel_potential_vorticity", "Potential Vorticity"),
-    "mod_pv": ("FULL", "uK m^2 kg^-1 s^-1", "", "Modified Potential Vorticity"),
-    "zh": ("FULL", "km", "geopotential_height", "Geopotential Altitude"),
     "n2": ("FULL", "s^-2", "square_of_brunt_vaisala_frequency_in_air", "N^2"),
     "TROPOPAUSE": ("HORIZONTAL", "km", "tropopause_altitude",
                    "vertical location of first WMO thermal tropopause"),
@@ -35,30 +32,6 @@ VARIABLES = {
     "TROPOPAUSE_SECOND_THETA": ("HORIZONTAL", "K", "secondary_tropopause_air_potential_temperature",
                                 "vertical location of second WMO thermal tropopause"),
 }
-
-
-def get_create_variable(ncin, name):
-    """
-    Either retrieves a variable from NetCDF or creates it,
-    in case it is not yet present.
-    """
-    if name not in ncin.variables:
-        horizontal = False
-        if name in VARIABLES:
-            dim, units, standard_name, long_name = VARIABLES[name]
-            horizontal = (dim == "HORIZONTAL")
-  
-        if horizontal:
-            var_id = ncin.createVariable(name, "f4", ("time", "lat", "lon"),
-                                 **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
-        else:
-            var_id = ncin.createVariable(name, "f4", ("time", "lev_2", "lat", "lon"),
-                                 **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
-        var_id.units = units
-        var_id.long_name = long_name
-        if standard_name:
-            var_id.standard_name = standard_name
-    return ncin.variables[name]
 
 
 def find_tropopause(alts, temps):
@@ -163,20 +136,27 @@ def parse_args(args):
     return opt, arg[0]
 
 
-def add_tropopauses(ncin):
+def my_geopotential_to_height(zh):
+    try:
+        result = geopotential_to_height(zh)
+    except ValueError:
+        zh = zh.copy()
+        zh.data *= 9.08655
+        zh.attrs["units"] = "m^2s^-2"
+        result = geopotential_to_height(zh)
+    return result
+
+
+def add_tropopauses(xin):
     """
     Adds first and second thermal WMO tropopause to model. Fill value is -999.
     """
-    print("Adding first and second tropopause")
 
-    temp = (units(ncin.variables["t"].units) *
-            ncin.variables["t"][:]).to("K").m
-    press = (units(ncin.variables["pressure"].units) *
-             ncin.variables["pressure"][:]).to("hPa").m
-    gph = geopotential_to_height(
-        units(ncin.variables["zh"].units) * ncin.variables["zh"][:]).to("km").m
-    theta = (units(ncin.variables["pt"].units) *
-             ncin.variables["pt"][:]).to("K").m
+    temp = (xin["t"].data * units(xin["t"].attrs["units"])).to("K").m
+    press = (xin["pressure"].data * units(xin["pressure"].attrs["units"])).to("hPa").m
+    gph = my_geopotential_to_height(xin["zh"])
+    gph = (xin["zh"].data * units(xin["zh"].attrs["units"])).to("km").m
+    theta = (xin["pt"].data * units(xin["pt"].attrs["units"])).to("K").m
 
     if gph[0, 1, 0, 0] < gph[0, 0, 0, 0]:
         gph = gph[:, ::-1, :, :]
@@ -217,68 +197,60 @@ def add_tropopauses(ncin):
     above_tropo1_press = np.exp(above_tropo1_press)
     above_tropo2_press = np.exp(above_tropo2_press)
 
-    get_create_variable(ncin, "TROPOPAUSE")[:] = above_tropo1
-    get_create_variable(ncin, "TROPOPAUSE_SECOND")[:] = above_tropo2
-    get_create_variable(ncin, "TROPOPAUSE_PRESSURE")[:] = above_tropo1_press * 100
-    get_create_variable(ncin, "TROPOPAUSE_SECOND_PRESSURE")[:] = above_tropo2_press * 100
-    get_create_variable(ncin, "TROPOPAUSE_THETA")[:] = above_tropo1_theta
-    get_create_variable(ncin, "TROPOPAUSE_SECOND_THETA")[:] = above_tropo2_theta
+    for name, var in [
+            ("TROPOPAUSE", above_tropo1),
+            ("TROPOPAUSE_SECOND", above_tropo2),
+            ("TROPOPAUSE_PRESSURE", above_tropo1_press * 100),
+            ("TROPOPAUSE_SECOND_PRESSURE", above_tropo2_press * 100),
+            ("TROPOPAUSE_THETA", above_tropo1_theta),
+            ("TROPOPAUSE_SECOND_THETA", above_tropo2_theta)]:
+        xin[name] = (("time", "lat", "lon"), var.astype(np.float32))
+        xin[name].attrs["units"] = VARIABLES[name][1]
+        xin[name].attrs["standard_name"] = VARIABLES[name][2]
+        xin[name].attrs["long_name"] = VARIABLES[name][3]
+    return xin
 
-
-def add_metpy(option, filename):
-    """
-    Adds the variables possible through metpy (theta, pv, n2)
-    """
-    with xr.load_dataset(filename) as xin:
-        if option.theta or option.pv:
-            print("Adding potential temperature...")
-            xin["pt"] = potential_temperature(xin["pressure"], xin["t"])
-            xin["pt"].data = np.array(xin["pt"].data)
-            xin["pt"].attrs["units"] = "K"
-            xin["pt"].attrs["standard_name"] = VARIABLES["pt"][2]
-        if option.pv:
-            print("Adding potential vorticity...")
-            xin = xin.metpy.assign_crs(grid_mapping_name='latitude_longitude',
-                                       earth_radius=6.356766e6)
-            xin["pv"] = potential_vorticity_baroclinic(xin["pt"], xin["pressure"], xin["u"], xin["v"])
-            xin["pv"].data = np.array(xin["pv"].data * 10 ** 6)
-            xin = xin.drop("metpy_crs")
-            xin["pv"].attrs["units"] = VARIABLES["pv"][1]
-            xin["pv"].attrs["standard_name"] = VARIABLES["pv"][2]
-            xin["mod_pv"] = xin["pv"] * ((xin["pt"] / 360) ** (-4.5))
-            xin["mod_pv"].attrs["standard_name"] = VARIABLES["mod_pv"][2]
-            xin["mod_pv"].attrs["units"] = VARIABLES["mod_pv"][1]
-        if option.n2:
-            print("Adding N2...")
-            xin["n2"] = brunt_vaisala_frequency_squared(geopotential_to_height(xin["zh"]), xin["pt"])
-            xin["n2"].data = np.array(xin["n2"].data)
-            xin["n2"].attrs["units"] = VARIABLES["n2"][1]
-            xin["n2"].attrs["standard_name"] = "square_of_brunt_vaisala_frequency_in_air"
-
-        xin.to_netcdf(filename)
-
-
-def add_rest(option, filename):
-    """
-    Adds the variables not possible through metpy
-    """
-    # Open NetCDF file as passed from command line
-    with netCDF4.Dataset(filename, "r+") as ncin:
-
-        history = datetime.datetime.now().isoformat() + ":" + " ".join(sys.argv)
-        if hasattr(ncin, "history"):
-            history += "\n" + ncin.history
-        ncin.history = history
-        ncin.date_modified = datetime.datetime.now().isoformat()
-
-        if option.tropopause:
-            add_tropopauses(ncin)
 
 
 def main():
     option, filename = parse_args(sys.argv[1:])
-    add_metpy(option, filename)
-    add_rest(option, filename)
+
+    xin = xr.load_dataset(filename)
+
+    if option.theta or option.pv:
+        print("Adding potential temperature...")
+        xin["pt"] = potential_temperature(xin["pressure"], xin["t"])
+        xin["pt"].data = xin["pt"].data.to(VARIABLES["pt"][1]).m
+        xin["pt"].attrs["units"] = VARIABLES["pt"][1]
+        xin["pt"].attrs["standard_name"] = VARIABLES["pt"][2]
+    if option.pv:
+        print("Adding potential vorticity...")
+        xin = xin.metpy.assign_crs(grid_mapping_name='latitude_longitude',
+                                   earth_radius=6.356766e6)
+        xin["pv"] = potential_vorticity_baroclinic(xin["pt"], xin["pressure"], xin["u"], xin["v"])
+        print(VARIABLES["pv"][1], xin["pv"].data.units)
+        xin["pv"].data = xin["pv"].data.to(VARIABLES["pv"][1]).m
+        xin = xin.drop("metpy_crs")
+        xin["pv"].attrs["units"] = VARIABLES["pv"][1]
+        xin["pv"].attrs["standard_name"] = VARIABLES["pv"][2]
+    if option.n2:
+        print("Adding N2...")
+        xin["n2"] = brunt_vaisala_frequency_squared(my_geopotential_to_height(xin["zh"]), xin["pt"])
+        xin["n2"].data = xin["n2"].data.to(VARIABLES["n2"][1])
+        xin["n2"].attrs["units"] = VARIABLES["n2"][1]
+        xin["n2"].attrs["standard_name"] = "square_of_brunt_vaisala_frequency_in_air"
+    if option.tropopause:
+        print("Adding first and second tropopause")
+        xin = add_tropopauses(xin)
+
+    now = datetime.datetime.now().isoformat()
+    history = now + ":" + " ".join(sys.argv)
+    if "history" in xin.attrs:
+        history += "\n" + xin.attrs["history"]
+    xin.attrs["history"] = history
+    xin.attrs["date_modified"] = now
+
+    xin.to_netcdf(filename)
 
 
 if __name__ == "__main__":

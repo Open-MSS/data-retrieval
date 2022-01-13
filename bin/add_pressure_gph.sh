@@ -13,18 +13,17 @@ done
 
 echo "Adding geopotential height..."
 #ncap2 -s 'sp=exp(lnsp);sp@units="Pa";sp@standard_name="surface_air_pressure";sp@code=134;sp@table=128' $input sp.nc
-cdo gheight -aexpr,"aps=1*exp(lnsp)" $input gph.nc
+cdo gheight -aexpr,"aps=exp(lnsp)" $input gph.nc
 # gheight is in meters, convert
-ncap2 -s "zh=zh*${GPH_FAC[$gph_units]};zh@units=\"${gph_units}\"" gph.nc gph2.nc
-mv gph2.nc gph.nc
+# ncap2 -s "zh=zh*${GPH_FAC[$gph_units]};zh@units=\"${gph_units}\"" gph.nc gph2.nc
 
 echo "Adding pressure..."
-cdo pressure_fl sp.nc pressure.nc
+cdo pressure_fl -aexpr,"aps=exp(lnsp)" $input pressure.nc
 # pressure is in Pa, convert
-ncap2 -s "pressure=pressure*${PRESSURE_FAC[$pressure_units]};pressure@units=\"${pressure_units}\"" pressure.nc pressure2.nc
-mv pressure2.nc pressure.nc
+#ncap2 -s "pressure=pressure*${PRESSURE_FAC[$pressure_units]};pressure@units=\"${pressure_units}\"" pressure.nc pressure2.nc
+#mv pressure2.nc pressure.nc
 
 echo "Merging to original file..."
-cdo merge sp.nc gph.nc pressure.nc merged.nc
+cdo merge $input gph.nc pressure.nc merged.nc
 mv merged.nc $input
-rm gph.nc pressure.nc sp.nc
+rm gph.nc pressure.nc
