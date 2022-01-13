@@ -8,6 +8,7 @@ import optparse
 import os
 import sys
 from metpy.calc import potential_temperature, potential_vorticity_baroclinic, brunt_vaisala_frequency_squared, geopotential_to_height
+from metpy.units import units
 import xarray as xr
 
 import netCDF4
@@ -17,8 +18,8 @@ import tqdm
 VARIABLES = {
     "pressure": ("FULL", "hPa", "air_pressure", "Pressure"),
     "pt": ("FULL", "K", "air_potential_temperature", "Potential Temperature"),
-    "pv": ("FULL", "m^2 K s^-1 kg^-1 10E-6", "ertel_potential_vorticity", "Potential Vorticity"),
-    "mod_pv": ("FULL", "m^2 K s^-1 kg^-1 10E-6", "", "Modified Potential Vorticity"),
+    "pv": ("FULL", "uK m^2 kg^-1 s^-1", "ertel_potential_vorticity", "Potential Vorticity"),
+    "mod_pv": ("FULL", "uK m^2 kg^-1 s^-1", "", "Modified Potential Vorticity"),
     "zh": ("FULL", "km", "geopotential_height", "Geopotential Altitude"),
     "n2": ("FULL", "s^-2", "square_of_brunt_vaisala_frequency_in_air", "N^2"),
     "TROPOPAUSE": ("HORIZONTAL", "km", "tropopause_altitude",
@@ -42,10 +43,17 @@ def get_create_variable(ncin, name):
     in case it is not yet present.
     """
     if name not in ncin.variables:
+        horizontal = False
         if name in VARIABLES:
             dim, units, standard_name, long_name = VARIABLES[name]
-        var_id = ncin.createVariable(name, "f4", ("time", "lev_2", "lat", "lon"),
-                                     **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
+            horizontal = (dim == "HORIZONTAL")
+  
+        if horizontal:
+            var_id = ncin.createVariable(name, "f4", ("time", "lat", "lon"),
+                                 **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
+        else:
+            var_id = ncin.createVariable(name, "f4", ("time", "lev_2", "lat", "lon"),
+                                 **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
         var_id.units = units
         var_id.long_name = long_name
         if standard_name:
@@ -126,16 +134,14 @@ def find_tropopause(alts, temps):
 
 def parse_args(args):
     oppa = optparse.OptionParser(usage="""
-    add_pv.py
+    add_ancillary.py
 
     Adds PV and ancillary quantities to 4D model data given as NetCDF.
-    Supported model types are ECMWFP (ECMWF on pressure levels), ECMWFZ
-    (JURASSIC ECMWF format on altitude levels), FNL, WACCM.
 
-    Usage: add_pv.py [options] <model type> <netCDF file>
+    Usage: add_pv.py [options] <netCDF file>
 
     Example:
-    add_pv.py ECMWFP ecmwfr_ana_ml_06072912.nc
+    add_pv.py ecmwfr_ana_ml_06072912.nc
     """)
 
     oppa.add_option('--theta', '', action='store_true',
@@ -163,10 +169,14 @@ def add_tropopauses(ncin):
     """
     print("Adding first and second tropopause")
 
-    temp = ncin.variables["t"][:]
-    press = ncin.variables["pressure"][:]/100
-    gph = ncin.variables["zh"][:]
-    theta = ncin.variables["pt"][:]
+    temp = (units(ncin.variables["t"].units) *
+            ncin.variables["t"][:]).to("K").m
+    press = (units(ncin.variables["pressure"].units) *
+             ncin.variables["pressure"][:]).to("hPa").m
+    gph = geopotential_to_height(
+        units(ncin.variables["zh"].units) * ncin.variables["zh"][:]).to("km").m
+    theta = (units(ncin.variables["pt"].units) *
+             ncin.variables["pt"][:]).to("K").m
 
     if gph[0, 1, 0, 0] < gph[0, 0, 0, 0]:
         gph = gph[:, ::-1, :, :]
