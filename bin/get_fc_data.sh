@@ -3,7 +3,6 @@
 #Copyright (C) 2021 by Forschungszentrum Juelich GmbH
 #Author(s): Joern Ungermann, May Baer, Jens-Uwe Grooss
 
-#SBATCH --workdir=/scratch/ms/datex/df8
 #SBATCH --qos=normal
 #SBATCH --job-name=get_fc_data
 #SBATCH --output=get_fc_data.%j.out
