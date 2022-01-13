@@ -153,7 +153,7 @@ def add_tropopauses(xin):
     """
 
     temp = (xin["t"].data * units(xin["t"].attrs["units"])).to("K").m
-    press = (xin["pressure"].data * units(xin["pressure"].attrs["units"])).to("hPa").m
+    press = np.log((xin["pres"].data * units(xin["pres"].attrs["units"])).to("hPa").m)
     gph = my_geopotential_to_height(xin["zh"])
     gph = (xin["zh"].data * units(xin["zh"].attrs["units"])).to("km").m
     theta = (xin["pt"].data * units(xin["pt"].attrs["units"])).to("K").m
@@ -219,7 +219,7 @@ def main():
 
     if option.theta or option.pv:
         print("Adding potential temperature...")
-        xin["pt"] = potential_temperature(xin["pressure"], xin["t"])
+        xin["pt"] = potential_temperature(xin["pres"], xin["t"])
         xin["pt"].data = xin["pt"].data.to(VARIABLES["pt"][1]).m
         xin["pt"].attrs["units"] = VARIABLES["pt"][1]
         xin["pt"].attrs["standard_name"] = VARIABLES["pt"][2]
@@ -227,8 +227,7 @@ def main():
         print("Adding potential vorticity...")
         xin = xin.metpy.assign_crs(grid_mapping_name='latitude_longitude',
                                    earth_radius=6.356766e6)
-        xin["pv"] = potential_vorticity_baroclinic(xin["pt"], xin["pressure"], xin["u"], xin["v"])
-        print(VARIABLES["pv"][1], xin["pv"].data.units)
+        xin["pv"] = potential_vorticity_baroclinic(xin["pt"], xin["pres"], xin["u"], xin["v"])
         xin["pv"].data = xin["pv"].data.to(VARIABLES["pv"][1]).m
         xin = xin.drop("metpy_crs")
         xin["pv"].attrs["units"] = VARIABLES["pv"][1]

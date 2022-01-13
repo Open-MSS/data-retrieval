@@ -20,6 +20,7 @@ def interpolate_vertical(ml_file, inter_file, new_vertical_axis):
                                                                       and len(ml[variable].dims) == 4
                                                                       and "lev" in ml[variable].dims]:
                 try:
+                    print("success", variable)
                     x = np.array(ml[new_vertical_axis].data)
                     y = np.array(ml[variable].data)
                     interpolated_data = interpolate_1d(interpolated["lev"].data, x, y, axis=1)
