@@ -99,7 +99,7 @@ fi
 export time_units="hours since ${init_date}"
 
 # Retrieve ml, sfc, pv and pt files
-$SRCDIR/download_an_all.sh $DATE $TIME $STEP
+$SRCDIR/download_ecmwf.sh $DATE $TIME $STEP
 
 # Convert grib to netCDF, set init time
 cdo -f nc4c -t ecmwf copy grib/${BASE}.tl.grib $tlfile
@@ -117,7 +117,7 @@ ncatted -O -a standard_name,lcc,o,c,low_cloud_area_fraction \
            -a standard_name,mcc,o,c,medium_cloud_area_fraction \
            -a standard_name,hcc,o,c,high_cloud_area_fraction \
            -a standard_name,u10m,o,c,surface_eastward_wind \
-	   -a standard_name,v10m,o,c,surface_northward_wind \
+           -a standard_name,v10m,o,c,surface_northward_wind \
            -a units,lcc,o,c,1 \
            -a units,mcc,o,c,1 \
            -a units,hcc,o,c,1 $sfcfile
@@ -154,7 +154,7 @@ mv $tmpfile $mlfile
 echo "Creating pressure level file..."
 cdo ml2pl,85000,50000,40000,30000,20000,15000,12000,10000,8000,6500,5000,4000,3000,2000,1000,500,100 $mlfile $plfile
 ncatted -O -a standard_name,plev,o,c,atmosphere_pressure_coordinate $plfile
-ncap2 -s "plev/=100;plev@units=\"hPa\"" $plfile $plfile-tmp
+ ncap2 -s "plev/=100;plev@units=\"hPa\"" $plfile $plfile-tmp
 mv $plfile-tmp $plfile
 ncks -7 -L 7 -C -O -x -v lev,sp,lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $plfile $plfile
 
@@ -172,7 +172,7 @@ mv $pvfile-tmp $pvfile
 python3 $SRCDIR/interpolate_missing_variables.py $mlfile $pvfile pv
 python3 $SRCDIR/rename_standard.py $mlfile $pvfile
 ncatted -O -a standard_name,lev,o,c,atmosphere_ertel_potential_vorticity_coordinate $pvfile
-ncatted -O -a units,lev,o,c,"m^2 K s^-1 kg^-1 10E-6" $pvfile
+ncatted -O -a units,lev,o,c,"m^2 uK s^-1 kg^-1" $pvfile
 ncks -O -7 -L 7 $pvfile $pvfile
 
 echo "Creating altitude level file..."

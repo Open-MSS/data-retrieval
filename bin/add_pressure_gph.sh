@@ -12,8 +12,8 @@ do
 done
 
 echo "Adding geopotential height..."
-ncap2 -s 'sp=exp(lnsp);sp@units="Pa";sp@standard_name="surface_air_pressure";sp@code=134;sp@table=128' $input sp.nc
-cdo gheight sp.nc gph.nc
+#ncap2 -s 'sp=exp(lnsp);sp@units="Pa";sp@standard_name="surface_air_pressure";sp@code=134;sp@table=128' $input sp.nc
+cdo gheight -aexpr,"aps=1*exp(lnsp)" $input gph.nc
 # gheight is in meters, convert
 ncap2 -s "zh=zh*${GPH_FAC[$gph_units]};zh@units=\"${gph_units}\"" gph.nc gph2.nc
 mv gph2.nc gph.nc
