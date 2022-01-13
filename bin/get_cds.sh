@@ -35,7 +35,7 @@ export time_units="hours since ${init_date}"
 
 # Download ml, sfc, pv and pt files
 echo "Downloading files, this might take a long time!"
-python bin/download_an_all.py $DATE $TIME $area $grid
+python bin/download_cds.py $DATE $TIME $area $grid
 
 if [ ! -f grib/${BASE}.ml.grib ]; then
    echo	FATAL `date` Model level file is missing

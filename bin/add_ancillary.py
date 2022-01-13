@@ -18,8 +18,8 @@ import tqdm
 VARIABLES = {
     "pressure": ("FULL", "hPa", "air_pressure", "Pressure"),
     "pt": ("FULL", "K", "air_potential_temperature", "Potential Temperature"),
-    "pv": ("FULL", "m^2 K s^-1 kg^-1 10E-6", "ertel_potential_vorticity", "Potential Vorticity"),
-    "mod_pv": ("FULL", "m^2 K s^-1 kg^-1 10E-6", "", "Modified Potential Vorticity"),
+    "pv": ("FULL", "uK m^2 kg^-1 s^-1", "ertel_potential_vorticity", "Potential Vorticity"),
+    "mod_pv": ("FULL", "uK m^2 kg^-1 s^-1", "", "Modified Potential Vorticity"),
     "zh": ("FULL", "km", "geopotential_height", "Geopotential Altitude"),
     "n2": ("FULL", "s^-2", "square_of_brunt_vaisala_frequency_in_air", "N^2"),
     "TROPOPAUSE": ("HORIZONTAL", "km", "tropopause_altitude",
@@ -43,10 +43,17 @@ def get_create_variable(ncin, name):
     in case it is not yet present.
     """
     if name not in ncin.variables:
+        horizontal = False
         if name in VARIABLES:
             dim, units, standard_name, long_name = VARIABLES[name]
-        var_id = ncin.createVariable(name, "f4", ("time", "lev_2", "lat", "lon"),
-                                     **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
+            horizontal = (dim == "HORIZONTAL")
+  
+        if horizontal:
+            var_id = ncin.createVariable(name, "f4", ("time", "lat", "lon"),
+                                 **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
+        else:
+            var_id = ncin.createVariable(name, "f4", ("time", "lev_2", "lat", "lon"),
+                                 **{"zlib": 1, "shuffle": 1, "fletcher32": 1, "fill_value": np.nan})
         var_id.units = units
         var_id.long_name = long_name
         if standard_name:
