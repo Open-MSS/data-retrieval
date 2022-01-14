@@ -13,9 +13,9 @@
 # in an mambaforge environment ncenv that includes cartopy (0.20.1), metpy (1.1.0)
 # nco (5.0.4), netcdf4 (1.5.8), scipy (1.7.3) and xarray (0.20.2)
 
-module load cdo
-. $HOME/mambaforge/etc/profile.d/conda.sh
-conda activate ncenv
+#module load cdo
+#. $HOME/mambaforge/etc/profile.d/conda.sh
+#conda activate ncenv
 
 # Define model domain sector, resolution and id name for ectrans
 export area=70/160/0/260
@@ -23,7 +23,7 @@ export grid=1.0/1.0
 export ectrans_id=data2_df8
 
 # Delete grib and nc files after transfer
-cleanup=yes
+cleanup=no
 
 # get forecast date
 # If used as a shell script that is run on a event trigger,
@@ -53,13 +53,13 @@ else
     FCSTEP=${MSJ_STEP:1:3}
 fi
 
-# HH=00
-# DAY=13
-# MONTH=01
-# YEAR=2022
-# STEP=0/to/36/by/6
-# FSTEP=036
-# FCSTEP=0
+HH=00
+DAY=13
+MONTH=01
+YEAR=2022
+STEP=0/to/36/by/6
+FSTEP=036
+FCSTEP=0
 case $FCSTEP in
     036)
 	STEP=0/to/36/by/6
@@ -76,11 +76,11 @@ esac
 
 
 # write data to the $SCRATCH directory with more available disk quota
-BINDIR=$HOME/data-retrieval/bin
-WORKDIR=$SCRATCH
-PYTHON=python3
-# export WORKDIR="$(dirname $0)/.."
-# BINDIR=$WORKDIR/bin
+export BINDIR=$HOME/data-retrieval/bin
+export WORKDIR=$SCRATCH
+export PYTHON=python3
+export WORKDIR="$(dirname $0)/.."
+export BINDIR=$WORKDIR/bin
 cd $WORKDIR
 mkdir -p mss
 mkdir -p grib
@@ -112,97 +112,7 @@ export time_units="hours since ${init_date}"
 $BINDIR/download_ecmwf.sh $DATE $TIME $STEP
 
 # Convert grib to netCDF, set init time
-cdo -f nc4c -t ecmwf copy grib/${BASE}.tl.grib $tlfile
-ncatted -O \
-    -a standard_name,lev,o,c,atmosphere_potential_temperature_coordinate \
-    -a units,time,o,c,"${time_units}" \
-    $tlfile
-
-cdo -f nc4c -t ecmwf copy grib/${BASE}.pv.grib $pvfile
-ncatted -O \
-    -a standard_name,lev,o,c,atmosphere_ertel_potential_vorticity_coordinate \
-    -a units,lev,o,c,"uK m^2 kg^-1 s^-1" \
-    -a units,time,o,c,"${time_units}" \
-    $pvfile
-
-cdo -f nc4c -t ecmwf copy grib/${BASE}.ml.grib $mlfile
-ncatted -O \
-    -a standard_name,cc,o,c,cloud_area_fraction_in_atmosphere_layer \
-    -a standard_name,o3,o,c,mole_fraction_of_ozone_in_air \
-    -a standard_name,ciwc,o,c,specific_cloud_ice_water_content \
-    -a standard_name,clwc,o,c,specific_cloud_liquid_water_content \
-    -a units,cc,o,c,dimensionless \
-    -a units,time,o,c,"${time_units}" \
-    $mlfile
-
-ncdump -h $mlfile | grep -q "lev = 1 "
-if [ $? -eq 0 ]; then
-    echo Fixing dimensions
-    cdo chname,lev,dummy $mlfile $tmpfile
-    rm $mlfile
-    cdo chname,lev_2,lev $tmpfile $mlfile
-    rm $tmpfile
-fi
-
-cdo -f nc4c -t ecmwf copy grib/${BASE}.sfc.grib $sfcfile
-ncatted -O \
-    -a standard_name,HCC,o,c,high_cloud_area_fraction \
-    -a standard_name,LCC,o,c,low_cloud_area_fraction \
-    -a standard_name,MCC,o,c,medium_cloud_area_fraction \
-    -a standard_name,MSL,o,c,air_pressure_at_sea_level \
-    -a standard_name,U10M,o,c,surface_eastward_wind \
-    -a standard_name,V10M,o,c,surface_northward_wind \
-    -a units,HCC,o,c,dimensionless \
-    -a units,LCC,o,c,dimensionless \
-    -a units,MCC,o,c,dimensionless \
-    $sfcfile
-
-cdo merge $sfcfile $mlfile $tmpfile
-mv $tmpfile $mlfile
-
-# Add pressure and geopotential height to model levels file
-$BINDIR/add_pressure_gph.sh $mlfile
-
-echo add ancillary
-# Add ancillary information
-$PYTHON $BINDIR/add_ancillary.py $mlfile --pv --theta --tropopause --n2
-
-echo separate sfc/ml
-# Separate sfc from ml variables
-ncks -7 -L 7 -C -O -x -vhyai,hyam,hybi,hybm,lev,n2,clwc,u,q,t,pres,zh,cc,w,v,ciwc,pt,pv,o3,d $mlfile $sfcfile
-ncks -C -O -vtime,lev,lon,lat,n2,clwc,u,q,t,pres,zh,cc,w,v,ciwc,pt,pv,o3,d,hyai,hyam,hybi,hybm,lnsp $mlfile $mlfile
-
-# Interpolate to different grids
-echo "Creating pressure level file..."
-cdo ml2pl,85000,50000,40000,30000,20000,15000,12000,10000,8000,6500,5000,4000,3000,2000,1000,500,100 $mlfile $plfile
-ncatted -O -a standard_name,plev,o,c,atmosphere_pressure_coordinate $plfile
-ncap2 -O -s "plev/=100;plev@units=\"hPa\"" $plfile $plfile
-ncks -7 -L 7 -C -O -x -v lev,lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $plfile $plfile
-
-echo "Creating potential temperature level file..."
-$PYTHON $BINDIR/rename_standard.py $mlfile $tlfile
-ncap2 -O -s "PV*=1000000" $tlfile $tlfile
-ncks -O -7 -L 7 $tlfile $tlfile
-
-echo "Creating potential vorticity level file..."
-ncap2 -O -s "lev/=1000" $pvfile $pvfile
-$PYTHON $BINDIR/rename_standard.py $mlfile $pvfile
-ncks -O -7 -L 7 $pvfile $pvfile
-
-echo "Creating altitude level file..."
-ncks -C -O -vtime,lev,lon,lat,n2,u,t,pres,zh,w,v,pt,pv,hyai,hyam,hybi,hybm,lnsp $mlfile $tmpfile
-cdo ml2hl,$gph_levels $tmpfile $alfile
-rm $tmpfile
-ncatted -O -a standard_name,height,o,c,atmosphere_altitude_coordinate $alfile
-ncap2 -O -s "height@units=\"km\";height=height/1000" $alfile $alfile
-ncks -7 -L 7 -C -O -x -v lev,sp,lnsp $alfile $alfile
-
-# Model/surface levels
-ncks -O -d lev,0,0 -d lev,16,28,4 -d lev,32,124,2 $mlfile $mlfile
-ncatted -O -a standard_name,lev,o,c,atmosphere_hybrid_sigma_pressure_coordinate $mlfile
-ncks -7 -L 7 -C -O -x -v lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $mlfile $mlfile
-
-echo "Done, your netcdf files are located at $(pwd)/mss"
+$BINDIR/convert.sh
 
 if ecaccess-association-list | grep -q $ectrans_id; then
   echo "Transfering files to "$ectrans_id 
