@@ -20,20 +20,16 @@ Scripts Setup
        git clone https://github.com/Open-MSS/data-retrieval.git
        cd data-retrieval
 
-2. Make the shell scripts executable
-
-       chmod +x ./bin/*.sh
-
-3. Install all requirements
+2. Install all requirements
 
        pip -r install requirements.txt
 
-4. Make sure cdo and nco are installed\
+3. Make sure cdo and nco are installed\
    e.g. for Ubuntu/Debian
 
        sudo apt-get install cdo nco netcdf-bin
 
-5. Adjust the settings.config to your liking
+4. Adjust the settings.config to your liking
 
 Usage
 -----
@@ -69,26 +65,22 @@ Scripts Setup
 
        git clone https://github.com/Open-MSS/data-retrieval.git
        cd data-retrieval
-       git checkout ecgate-forecast
 
-2. Make the shell scripts executable
 
-       chmod +x ./bin/*.sh
-
-3. Install all requirements
+2. Install all requirements
 
        pip3 install --user -r requirements.txt
 
-4. Adjust the settings.config to your liking
+3. Adjust the settings.config to your liking
 
 Usage
 -----
 After completing both setups, you can use this script as follows:
-
-    MSJ_YEAR=<year> MSJ_MONTH=<month> MSJ_DAY=<day> MSJ_BASETIME=<hour> MSJ_STEP=<step> FSTEP=<fstep> FCSTEP=<fcstep> ./bin/get_ecmwf.sh
-
-Where \<year\>, \<month\>, \<day\> and \<hour\> is the date and time where the forecast was created. To be used normally with the queuing system provided by ecmwf.
-
-For example, use this_
-    MSJ_YEAR=2022 MSJ_MONTH=01 MSJ_DAY=13 MSJ_BASETIME=00 MSJ_STEP=000 FSTEP=036 FCSTEP=036 ./bin/get_ecmwf.sh
+   * The default settings are located in settings.default. It is set to the forecast
+     for 36h from today 0:00 UTC for a certain domain and resolution. You may add (or edit)
+     a file named settings.config with specific environment variable settings
+     (e.g. like export DAY=22 ; export MONTH=12; export YEAR=2021; export GRID=0.5/0.5)
+     and run the script locally by  ./bin/get_ecmwf.sh or as a batch job.
+   * if it is run as a batch job using the MSJ trigger system, init and forecast times
+     that are then automatically stored in the MSJ* variables will be uesed instead
 
