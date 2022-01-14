@@ -18,8 +18,9 @@ def interpolate_vertical(ml_file, inter_file, new_vertical_axis):
         with xr.open_dataset(ml_file) as ml:
             for variable in [variable for variable in ml.variables if variable not in interpolated.variables
                                                                       and len(ml[variable].dims) == 4
-                                                                      and "lev_2" in ml[variable].dims]:
+                                                                      and "lev" in ml[variable].dims]:
                 try:
+                    print("success", variable)
                     x = np.array(ml[new_vertical_axis].data)
                     y = np.array(ml[variable].data)
                     interpolated_data = interpolate_1d(interpolated["lev"].data, x, y, axis=1)

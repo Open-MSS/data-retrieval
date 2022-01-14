@@ -16,6 +16,8 @@ def fill_attributes(ml_file, other_file):
             for variable in other.variables:
                 if variable in ml.variables:
                     other[variable].attrs = ml[variable].attrs
+                elif variable.lower() in ml.variables:
+                    other[variable].attrs = ml[variable.lower()].attrs
         other.to_netcdf(other_file)
 
 
