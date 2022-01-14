@@ -13,34 +13,34 @@
 # in an mambaforge environment ncenv that includes cartopy (0.20.1), metpy (1.1.0)
 # nco (5.0.4), netcdf4 (1.5.8), scipy (1.7.3) and xarray (0.20.2)
 
-#module load cdo
-#. $HOME/mambaforge/etc/profile.d/conda.sh
-#conda activate ncenv
+module load cdo
+. $HOME/mambaforge/etc/profile.d/conda.sh
+conda activate ncenv
 
 # Define model domain sector, resolution and id name for ectrans
 
 # write data to the $SCRATCH directory with more available disk quota
-export BINDIR="$(dirname $0)"
+#export BINDIR=`pwd`
+export BINDIR=$HOME/data-retrieval/bin
 export WORKDIR=${BINDIR}/..
+echo bindir $BINDIR
 
 . ${BINDIR}/../settings.default
+
+if [ -f ${BINDIR}/../settings.config ]; then
+    . ${BINDIR}/../settings.config
+fi
 
 # get forecast date
 # If used as a shell script that is run on a event trigger,
 # the $MSJ* environment variables contain the corresponding time info.
 # This can be done from the web interface or e.g. by the command
 #    ecaccess-job-submit -ni fc00h036 get_fc_data.sh
-# If these variables are empty, a pre-defined forecast of today is run.
+# If these variables are empty, forecast times are defined in settings.
 
 
-if [[ $MSJ_YEAR == "" ]]
+if [[ $MSJ_YEAR != "" ]]
 then
-    export DAY=`date +%d`
-    export MONTH=`date +%m`
-    export YEAR=`date +%Y`
-    export HH=00
-    export FCSTEP=036
-else    
     echo Date: $MSJ_YEAR $MSJ_MONTH $MSJ_DAY
     echo BASETIME, STEP:  $MSJ_BASETIME $MSJ_STEP
    
@@ -49,24 +49,21 @@ else
     export YEAR=$MSJ_YEAR
     export HH=$MSJ_BASETIME
     export FCSTEP=${MSJ_STEP:0:3}
+
+    case $FCSTEP in
+	036)
+	    export STEP=0/to/36/by/6
+	    ;;
+	072)
+	    export STEP=42/to/72/by/6
+	    ;;
+	144)
+	    export STEP=78/to/144/by/6
+	    ;;
+	*)
+    esac
 fi
 
-case $FCSTEP in
-    036)
-       export STEP=0/to/36/by/6
-       ;;
-    072)
-       export STEP=42/to/72/by/6
-       ;;
-    144)
-       export STEP=78/to/144/by/6
-       ;;
-    *)
-esac
-
-if [ -f ${BINDIR}/../settings.config ]; then
-    . ${BINDIR}/../settings.config
-fi
 
 cd $WORKDIR
 mkdir -p mss

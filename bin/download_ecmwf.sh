@@ -62,7 +62,7 @@ if [ ! -f grib/${BASE}.tl.grib ]; then
     area=$AREA,
     grid=$GRID,
     class=od,
-    levelist=$THETA_LEVELS
+    levelist=$THETA_LEVELS,
     levtype=pt,
     param=$THETA_PARAMETERS,
     stream=oper,
