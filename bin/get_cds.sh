@@ -31,7 +31,7 @@ export time_units="hours since ${init_date}"
 echo "Downloading files, this might take a long time!"
 $PYTHON bin/download_cds.py
 
-$BINDIR/convert.sh
+. $BINDIR/convert.sh
 
 if [[ $CLEANUP == "yes" ]]                                                           
 then

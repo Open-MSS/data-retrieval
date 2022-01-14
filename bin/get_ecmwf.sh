@@ -91,7 +91,7 @@ export init_date="hours since ${init_date}"
 $BINDIR/download_ecmwf.sh
 
 # Convert grib to netCDF, set init time
-$BINDIR/convert.sh
+. $BINDIR/convert.sh
 
 if ecaccess-association-list | grep -q $ECTRANS_ID; then
   echo "Transfering files to "$ECTRANS_ID 
