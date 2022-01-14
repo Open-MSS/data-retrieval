@@ -1,0 +1,9 @@
+# Do not leave any whitespaces
+# variable=value
+
+export PYTHON=python
+export CLEANUP=no
+export AREA=75/-15/30/42.5
+export GRID=1.0/1.0
+export ECTRANS_ID=MSS-Data-Transfer
+

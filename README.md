@@ -75,25 +75,20 @@ Scripts Setup
 
        chmod +x ./bin/*.sh
 
-3. Create a .bashrc for setting up paths asn tools
-
-       cat bashrc_ecmwf >> ~/.bashrc
-       source ~/.bashrc
-
-4. Install all requirements
+3. Install all requirements
 
        pip3 install --user -r requirements.txt
 
-5. Adjust the settings.config to your liking
+4. Adjust the settings.config to your liking
 
 Usage
 -----
 After completing both setups, you can use this script as follows:
 
-    ./bin/get_ecmwf.sh <date> <time> <step>
+    MSJ_YEAR=<year> MSJ_MONTH=<month> MSJ_DAY=<day> MSJ_BASETIME=<hour> MSJ_STEP=<step> FSTEP=<fstep> FCSTEP=<fcstep> ./bin/get_ecmwf.sh
 
-Where \<date\> and \<time\> is the date and time where the forecast was created, and \<step\> is how many hours after the date and time you want your data.\
-For example, to get a forecast created at 22nd of April 2021 at 0 o'clock, for 23rd and 24th of April at 0 o'clock, use
+Where \<year\>, \<month\>, \<day\> and \<hour\> is the date and time where the forecast was created. To be used normally with the queuing system provided by ecmwf.
 
-    ./bin/get_ecmwf.sh 2021-04-22 00:00:00 24/48
+For example, use this_
+    MSJ_YEAR=2022 MSJ_MONTH=01 MSJ_DAY=13 MSJ_BASETIME=00 MSJ_STEP=000 FSTEP=036 FCSTEP=036 ./bin/get_ecmwf.sh
 

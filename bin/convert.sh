@@ -2,6 +2,32 @@
 #Copyright (C) 2021 by Forschungszentrum Juelich GmbH
 #Author(s): Joern Ungermann, May Baer
 
+export mlfile=mss/${BASE}.ml.nc
+export plfile=mss/${BASE}.pl.nc
+export alfile=mss/${BASE}.al.nc
+export tlfile=mss/${BASE}.tl.nc
+export pvfile=mss/${BASE}.pv.nc
+export sfcfile=mss/${BASE}.sfc.nc
+export tmpfile=mss/.${BASE}.tmp.nc
+
+if [ ! -f grib/${BASE}.ml.grib ]; then
+   echo FATAL `date` Model level file is missing
+   exit
+fi
+if [ ! -f grib/${BASE}.sfc.grib ]; then
+   echo FATAL `date` Surface file is missing
+   exit
+fi
+if [ ! -f grib/${BASE}.pv.grib ]; then
+   echo FATAL `date` Potential Vorticity level file is missing
+   exit
+fi
+if [ ! -f grib/${BASE}.tl.grib ]; then
+   echo FATAL `date` Potential Temperature level file is missing
+   exit
+fi
+
+
 # Convert grib to netCDF, set init time
 cdo -f nc4c -t ecmwf copy grib/${BASE}.tl.grib $tlfile
 ncatted -O \
@@ -65,7 +91,7 @@ ncks -C -O -vtime,lev,lon,lat,n2,clwc,u,q,t,pres,zh,cc,w,v,ciwc,pt,pv,o3,d,hyai,
 
 # Interpolate to different grids
 echo "Creating pressure level file..."
-cdo ml2pl,85000,50000,40000,30000,20000,15000,12000,10000,8000,6500,5000,4000,3000,2000,1000,500,100 $mlfile $plfile
+cdo ml2pl,$PRES_LEVELS $mlfile $plfile
 ncatted -O -a standard_name,plev,o,c,atmosphere_pressure_coordinate $plfile
 ncap2 -O -s "plev/=100;plev@units=\"hPa\"" $plfile $plfile
 ncks -7 -L 7 -C -O -x -v lev,lnsp,nhyi,nhym,hyai,hyam,hybi,hybm $plfile $plfile
@@ -82,7 +108,7 @@ ncks -O -7 -L 7 $pvfile $pvfile
 
 echo "Creating altitude level file..."
 ncks -C -O -vtime,lev,lon,lat,n2,u,t,pres,zh,w,v,pt,pv,hyai,hyam,hybi,hybm,lnsp $mlfile $tmpfile
-cdo ml2hl,$gph_levels $tmpfile $alfile
+cdo ml2hl,$GPH_LEVELS $tmpfile $alfile
 rm $tmpfile
 ncatted -O -a standard_name,height,o,c,atmosphere_altitude_coordinate $alfile
 ncap2 -O -s "height@units=\"km\";height=height/1000" $alfile $alfile
