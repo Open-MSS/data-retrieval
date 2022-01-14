@@ -82,5 +82,5 @@ After completing both setups, you can use this script as follows:
      (e.g. like export DAY=22 ; export MONTH=12; export YEAR=2021; export GRID=0.5/0.5)
      and run the script locally by  ./bin/get_ecmwf.sh or as a batch job.
    * if it is run as a batch job using the MSJ trigger system, init and forecast times
-     that are then automatically stored in the MSJ* variables will be uesed instead
+     that are then automatically stored in the environment variables MSJ* will be used instead
 
