@@ -17,6 +17,7 @@ module load cdo
 . $HOME/mambaforge/etc/profile.d/conda.sh
 conda activate ncenv
 
+which python
 # Define model domain sector, resolution and id name for ectrans
 
 # write data to the $SCRATCH directory with more available disk quota
@@ -48,7 +49,7 @@ then
     export MONTH=$MSJ_MONTH
     export YEAR=$MSJ_YEAR
     export HH=$MSJ_BASETIME
-    export FCSTEP=${MSJ_STEP:0:3}
+    export FCSTEP=${MSJ_STEP: -3}
 
     case $FCSTEP in
 	036)
