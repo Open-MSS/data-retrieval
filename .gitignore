@@ -2,3 +2,4 @@
 *.nc*
 *.grib*
 *.save*
+settings.config
