@@ -93,7 +93,14 @@ After completing both setups, you can use this script as follows:
   for 36h from today 0:00 UTC for a certain domain and resolution. You may add (or edit)
   a file named settings.config with specific environment variable settings
   (e.g. like export DAY=22 ; export MONTH=12; export YEAR=2021; export GRID=0.5/0.5)
-  and run the script locally by  ./bin/get\_ecmwf.sh or as a batch job.
+  and run the script locally by  ./bin/get\_ecmwf.sh or as a batch job by
+     sbatch ./bin/get\_ecmwf.sh
 * If it is run as a batch job using the MSJ trigger system, init and forecast times
   that are then automatically stored in the environment variables MSJ* will be used instead
-
+  With the trigger, the job ist started when a specific forecast is available,
+  e.g. fc00h036 for the 36h forecast. It can be started either form the ecaccess website
+  or by typing
+  ecaccess-job-submit -ni fc00h036 get_fc_data.sh (automatic daily job renewal)
+  or
+  ecaccess-job-submit -noReview -ni fc00h036 get_fc_data.sh (job runs once)
+     

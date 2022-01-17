@@ -14,6 +14,10 @@
 # nco (5.0.4), netcdf4 (1.5.8), scipy (1.7.3) and xarray (0.20.2)
 
 module load cdo
+if [[ $PATH != *"mambaforge/bin"* ]]
+then
+    PATH=$HOME/mambaforge/bin/:$PATH
+fi
 . $HOME/mambaforge/etc/profile.d/conda.sh
 conda activate ncenv
 
