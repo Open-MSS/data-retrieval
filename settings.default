@@ -3,18 +3,6 @@
 
 export PYTHON=python
 export CLEANUP=no
-export AREA=75/-15/30/42.5
-export GRID=1.0/1.0
-export ECTRANS_ID=MSS-Data-Transfer
-
-# set init and forecast times 
-# (default 36h from today 00:00) 
-export DAY=`date +%d`
-export MONTH=`date +%m`
-export YEAR=`date +%Y`
-export HH=00
-export FCSTEP=036
-export STEP=0/to/36/by/6
 
 # definition of parameters and levels to read
 export MODEL_LEVELS=1/to/137

@@ -1,0 +1,21 @@
+# Do not leave any whitespaces
+# variable=value
+
+export PYTHON=python
+export CLEANUP=no
+
+# configure area, grid, and transfer
+export AREA=75/-15/30/42.5
+export GRID=1.0/1.0
+export ECTRANS_ID=MSS-Data-Transfer
+
+# set init and forecast times for testing
+# (default 36h from today 00:00) 
+# Will be overwritten by ECMWF queueing system
+export DAY=`date +%d`
+export MONTH=`date +%m`
+export YEAR=`date +%Y`
+export HH=00
+export FCSTEP=036
+export STEP=0/to/36/by/6
+
