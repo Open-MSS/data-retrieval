@@ -29,8 +29,11 @@ echo bindir $BINDIR
 . ${BINDIR}/../settings.default
 
 if [ -f ${BINDIR}/../settings.config ]; then
-    . ${BINDIR}/../settings.config
+    echo Please copy the settings.example to settings.config and configure your setup!
+    exit 1
 fi
+
+. ${BINDIR}/../settings.config
 
 # get forecast date
 # If used as a shell script that is run on a event trigger,

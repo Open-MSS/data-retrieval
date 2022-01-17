@@ -6,10 +6,13 @@ export BINDIR=$(dirname $0)
 export WORKDIR=${BINDIR}/..
 
 . ${BINDIR}/../settings.default
+
 if [ -f ${BINDIR}/../settings.config ]; then
-    . ${BINDIR}/../settings.config
+    echo Please copy the settings.example to settings.config and configure your setup!
+    exit 1
 fi
 
+. ${BINDIR}/../settings.config
 
 cd $WORKDIR
 mkdir -p mss
