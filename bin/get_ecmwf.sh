@@ -13,31 +13,19 @@
 # in an mambaforge environment ncenv that includes cartopy (0.20.1), metpy (1.1.0)
 # nco (5.0.4), netcdf4 (1.5.8), scipy (1.7.3) and xarray (0.20.2)
 
-module load cdo
-if [[ $PATH != *"mambaforge/bin"* ]]
-then
-    PATH=$HOME/mambaforge/bin/:$PATH
-fi
-. $HOME/mambaforge/etc/profile.d/conda.sh
-conda activate ncenv
-
-which python
 # Define model domain sector, resolution and id name for ectrans
 
-# write data to the $SCRATCH directory with more available disk quota
-#export BINDIR=`pwd`
-export BINDIR=$HOME/data-retrieval/bin
-export WORKDIR=${BINDIR}/..
-echo bindir $BINDIR
+export MAINDIR=$HOME/data-retrieval
+export BINDIR=$MAINDIR/bin
 
-. ${BINDIR}/../settings.default
+. ${MAINDIR}/settings.default
 
-if [ -f ${BINDIR}/../settings.config ]; then
+if [ ! -f ${MAINDIR}/settings.config ]; then
     echo Please copy the settings.example to settings.config and configure your setup!
     exit 1
 fi
 
-. ${BINDIR}/../settings.config
+. ${MAINDIR}/settings.config
 
 # get forecast date
 # If used as a shell script that is run on a event trigger,
