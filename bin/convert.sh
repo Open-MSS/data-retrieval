@@ -38,6 +38,7 @@ ncatted -O \
 cdo -f nc4c -t ecmwf copy grib/${BASE}.pv.grib $pvfile
 ncatted -O \
     -a standard_name,lev,o,c,atmosphere_ertel_potential_vorticity_coordinate \
+    -a standard_name,Z,o,c,geopotential_height
     -a units,lev,o,c,"uK m^2 kg^-1 s^-1" \
     -a units,time,o,c,"${time_units}" \
     $pvfile
