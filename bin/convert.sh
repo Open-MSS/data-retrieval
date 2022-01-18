@@ -38,6 +38,7 @@ ncatted -O \
 cdo -f nc4c -t ecmwf copy grib/${BASE}.pv.grib $pvfile
 ncatted -O \
     -a standard_name,lev,o,c,atmosphere_ertel_potential_vorticity_coordinate \
+    -a standard_name,Z,o,c,geopotential_height \
     -a units,lev,o,c,"uK m^2 kg^-1 s^-1" \
     -a units,time,o,c,"${time_units}" \
     $pvfile
@@ -104,6 +105,7 @@ ncks -O -7 -L 7 $tlfile $tlfile
 echo "Creating potential vorticity level file..."
 ncap2 -O -s "lev/=1000" $pvfile $pvfile
 $PYTHON $BINDIR/rename_standard.py $mlfile $pvfile
+# $PYTHON bin/interpolate_missing_variables.py $mlfile $pvfile pv zh
 ncks -O -7 -L 7 $pvfile $pvfile
 
 echo "Creating altitude level file..."
