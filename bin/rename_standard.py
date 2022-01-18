@@ -14,6 +14,8 @@ def fill_attributes(ml_file, other_file):
     with xr.load_dataset(other_file) as other:
         with xr.open_dataset(ml_file) as ml:
             for variable in other.variables:
+                if variable == "lev":
+                    continue
                 if variable in ml.variables:
                     other[variable].attrs = ml[variable].attrs
                 elif variable.lower() in ml.variables:

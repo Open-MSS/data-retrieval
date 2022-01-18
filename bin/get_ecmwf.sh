@@ -64,7 +64,6 @@ fi
 cd $WORKDIR
 mkdir -p mss
 mkdir -p grib
-pwd
 
 # Set path, filenames and variables used later in the script
 export DATE=${YEAR}-${MONTH}-${DAY}
@@ -78,7 +77,7 @@ if [[ "$init_date" > "$DATE" ]]
 then 
     export init_date="${DATE}T${TIME}"
 fi
-export init_date="hours since ${init_date}"
+export time_units="hours since ${init_date}"
 
 # Retrieve ml, sfc, pv and pt files
 $BINDIR/download_ecmwf.sh
