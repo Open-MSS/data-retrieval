@@ -104,6 +104,7 @@ ncks -O -7 -L 7 $tlfile $tlfile
 echo "Creating potential vorticity level file..."
 ncap2 -O -s "lev/=1000" $pvfile $pvfile
 $PYTHON $BINDIR/rename_standard.py $mlfile $pvfile
+$PYTHON bin/interpolate_missing_variables.py $mlfile $pvfile pv
 ncks -O -7 -L 7 $pvfile $pvfile
 
 echo "Creating altitude level file..."

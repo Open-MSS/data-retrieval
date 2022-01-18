@@ -141,7 +141,7 @@ def my_geopotential_to_height(zh):
         result = geopotential_to_height(zh)
     except ValueError:
         zh = zh.copy()
-        zh.data *= 9.08655
+        zh.data = 9.80665 * (zh.data * units(zh.attrs["units"])).to("m").m
         zh.attrs["units"] = "m^2s^-2"
         result = geopotential_to_height(zh)
     return result
@@ -154,8 +154,7 @@ def add_tropopauses(xin):
 
     temp = (xin["t"].data * units(xin["t"].attrs["units"])).to("K").m
     press = np.log((xin["pres"].data * units(xin["pres"].attrs["units"])).to("hPa").m)
-    gph = my_geopotential_to_height(xin["zh"])
-    gph = (xin["zh"].data * units(xin["zh"].attrs["units"])).to("km").m
+    gph = my_geopotential_to_height(xin["zh"]).to("km").m
     theta = (xin["pt"].data * units(xin["pt"].attrs["units"])).to("K").m
 
     if gph[0, 1, 0, 0] < gph[0, 0, 0, 0]:
