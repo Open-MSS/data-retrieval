@@ -154,7 +154,7 @@ def add_tropopauses(xin):
 
     temp = (xin["t"].data * units(xin["t"].attrs["units"])).to("K").m
     press = np.log((xin["pres"].data * units(xin["pres"].attrs["units"])).to("hPa").m)
-    gph = my_geopotential_to_height(xin["zh"]).to("km").m
+    gph = my_geopotential_to_height(xin["zh"]).data.to("km").m
     theta = (xin["pt"].data * units(xin["pt"].attrs["units"])).to("K").m
 
     if gph[0, 1, 0, 0] < gph[0, 0, 0, 0]:
