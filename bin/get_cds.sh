@@ -7,7 +7,7 @@ export WORKDIR=${BINDIR}/..
 
 . ${BINDIR}/../settings.default
 
-if [ -f ${BINDIR}/../settings.config ]; then
+if [ ! -f ${BINDIR}/../settings.config ]; then
     echo Please copy the settings.example to settings.config and configure your setup!
     exit 1
 fi
