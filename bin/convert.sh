@@ -108,13 +108,15 @@ $PYTHON $BINDIR/rename_standard.py $mlfile $pvfile
 # $PYTHON bin/interpolate_missing_variables.py $mlfile $pvfile pv zh
 ncks -O -7 -L 7 $pvfile $pvfile
 
-echo "Creating altitude level file..."
-ncks -C -O -vtime,lev,lon,lat,n2,u,t,pres,zh,w,v,pt,pv,hyai,hyam,hybi,hybm,lnsp $mlfile $tmpfile
-cdo ml2hl,$GPH_LEVELS $tmpfile $alfile
-rm $tmpfile
-ncatted -O -a standard_name,height,o,c,atmosphere_altitude_coordinate $alfile
-ncap2 -O -s "height@units=\"km\";height=height/1000" $alfile $alfile
-ncks -7 -L 7 -C -O -x -v lev,sp,lnsp $alfile $alfile
+if [[ x$GPH_LEVELS != x"" ]]; then
+    echo "Creating altitude level file..."
+    ncks -C -O -vtime,lev,lon,lat,n2,u,t,pres,zh,w,v,pt,pv,hyai,hyam,hybi,hybm,lnsp $mlfile $tmpfile
+    cdo ml2hl,$GPH_LEVELS $tmpfile $alfile
+    rm $tmpfile
+    ncatted -O -a standard_name,height,o,c,atmosphere_altitude_coordinate $alfile
+    ncap2 -O -s "height@units=\"km\";height=height/1000" $alfile $alfile
+    ncks -7 -L 7 -C -O -x -v lev,sp,lnsp $alfile $alfile
+fi
 
 # Model/surface levels
 ncks -O -d lev,0,0 -d lev,16,28,4 -d lev,32,124,2 $mlfile $mlfile

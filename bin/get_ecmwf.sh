@@ -88,11 +88,21 @@ $BINDIR/download_ecmwf.sh
 if ecaccess-association-list | grep -q $ECTRANS_ID; then
   echo "Transfering files to "$ECTRANS_ID 
   ectrans -verbose -remote $ECTRANS_ID -source $mlfile -target $mlfile -overwrite -remove 
-  ectrans -verbose -remote $ECTRANS_ID -source $tlfile -target $tlfile -overwrite -remove 
-  ectrans -verbose -remote $ECTRANS_ID -source $plfile -target $plfile -overwrite -remove 
-  ectrans -verbose -remote $ECTRANS_ID -source $pvfile -target $pvfile -overwrite -remove 
-  ectrans -verbose -remote $ECTRANS_ID -source $alfile -target $alfile -overwrite -remove 
-  ectrans -verbose -remote $ECTRANS_ID -source $sfcfile -target $sfcfile -overwrite -remove
+  if [ -f $tlfile ]; then
+      ectrans -verbose -remote $ECTRANS_ID -source $tlfile -target $tlfile -overwrite -remove 
+  fi
+  if [ -f $plfile ]; then
+      ectrans -verbose -remote $ECTRANS_ID -source $plfile -target $plfile -overwrite -remove 
+  fi
+  if [ -f $pvfile ]; then
+      ectrans -verbose -remote $ECTRANS_ID -source $pvfile -target $pvfile -overwrite -remove 
+  fi
+  if [ -f $alfile ]; then
+      ectrans -verbose -remote $ECTRANS_ID -source $alfile -target $alfile -overwrite -remove 
+  fi
+  if [ -f $sfcfile ]; then
+      ectrans -verbose -remote $ECTRANS_ID -source $sfcfile -target $sfcfile -overwrite -remove
+  fi
 fi
 
 if [[ $CLEANUP == "yes" ]]
