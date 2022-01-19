@@ -2,7 +2,8 @@
 # variable=value
 
 module load cdo
-if [[ $PATH != *"mambaforge/bin"* ]]
+PREF=$CONDA_PREFIX##*/
+if [[ $PREF != mambaforge && $PREF != ncenv ]]
 then
     PATH=$HOME/mambaforge/bin/:$PATH
 fi
