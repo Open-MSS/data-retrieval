@@ -4,16 +4,16 @@
 #Author(s): Joern Ungermann, May Baer, Jens-Uwe Grooss
 
 #SBATCH --qos=normal
-#SBATCH --job-name=get_fc_data
-#SBATCH --output=get_fc_data.%j.out
-#SBATCH --error=get_fc_data.%j.out
+#SBATCH --job-name=get_ecmwf
+#SBATCH --output=get_ecmwf.%j.out
+#SBATCH --error=get_ecmwf.%j.out
 
 
 # This script works with the cdo version installed on ECACCESS and 
 # in an mambaforge environment ncenv that includes cartopy (0.20.1), metpy (1.1.0)
 # nco (5.0.4), netcdf4 (1.5.8), scipy (1.7.3) and xarray (0.20.2)
 
-# Define model domain sector, resolution and id name for ectrans
+# Define model domain sector, resolution and id name for ectrans in settings.config
 
 export MAINDIR=$HOME/data-retrieval
 export BINDIR=$MAINDIR/bin
@@ -31,8 +31,8 @@ fi
 # If used as a shell script that is run on a event trigger,
 # the $MSJ* environment variables contain the corresponding time info.
 # This can be done from the web interface or e.g. by the command
-#    ecaccess-job-submit -ni fc00h036 get_fc_data.sh
-# If these variables are empty, forecast times are defined in settings.
+#    ecaccess-job-submit -ni fc00h036 get_ecmwf.sh
+# If these variables are empty, forecast times are defined in settings.config
 
 
 if [[ $MSJ_YEAR != "" ]]
