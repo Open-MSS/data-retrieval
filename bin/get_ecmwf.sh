@@ -4,16 +4,16 @@
 #Author(s): Joern Ungermann, May Baer, Jens-Uwe Grooss
 
 #SBATCH --qos=normal
-#SBATCH --job-name=get_fc_data
-#SBATCH --output=get_fc_data.%j.out
-#SBATCH --error=get_fc_data.%j.out
+#SBATCH --job-name=get_ecmwf
+#SBATCH --output=get_ecmwf.%j.out
+#SBATCH --error=get_ecmwf.%j.out
 
 
 # This script works with the cdo version installed on ECACCESS and 
 # in an mambaforge environment ncenv that includes cartopy (0.20.1), metpy (1.1.0)
 # nco (5.0.4), netcdf4 (1.5.8), scipy (1.7.3) and xarray (0.20.2)
 
-# Define model domain sector, resolution and id name for ectrans
+# Define model domain sector, resolution and id name for ectrans in settings.config
 
 export MAINDIR=$HOME/data-retrieval
 export BINDIR=$MAINDIR/bin
@@ -31,8 +31,8 @@ fi
 # If used as a shell script that is run on a event trigger,
 # the $MSJ* environment variables contain the corresponding time info.
 # This can be done from the web interface or e.g. by the command
-#    ecaccess-job-submit -ni fc00h036 get_fc_data.sh
-# If these variables are empty, forecast times are defined in settings.
+#    ecaccess-job-submit -ni fc00h036 get_ecmwf.sh
+# If these variables are empty, forecast times are defined in settings.config
 
 
 if [[ $MSJ_YEAR != "" ]]
@@ -87,21 +87,21 @@ $BINDIR/download_ecmwf.sh
 
 if ecaccess-association-list | grep -q $ECTRANS_ID; then
   echo "Transfering files to "$ECTRANS_ID 
-  ectrans -verbose -remote $ECTRANS_ID -source $mlfile -target $mlfile -overwrite -remove 
+  ectrans -remote $ECTRANS_ID -source $mlfile -target $mlfile -overwrite -remove 
   if [ -f $tlfile ]; then
-      ectrans -verbose -remote $ECTRANS_ID -source $tlfile -target $tlfile -overwrite -remove 
+      ectrans -remote $ECTRANS_ID -source $tlfile -target $tlfile -overwrite -remove 
   fi
   if [ -f $plfile ]; then
-      ectrans -verbose -remote $ECTRANS_ID -source $plfile -target $plfile -overwrite -remove 
+      ectrans -remote $ECTRANS_ID -source $plfile -target $plfile -overwrite -remove 
   fi
   if [ -f $pvfile ]; then
-      ectrans -verbose -remote $ECTRANS_ID -source $pvfile -target $pvfile -overwrite -remove 
+      ectrans -remote $ECTRANS_ID -source $pvfile -target $pvfile -overwrite -remove 
   fi
   if [ -f $alfile ]; then
-      ectrans -verbose -remote $ECTRANS_ID -source $alfile -target $alfile -overwrite -remove 
+      ectrans -remote $ECTRANS_ID -source $alfile -target $alfile -overwrite -remove 
   fi
   if [ -f $sfcfile ]; then
-      ectrans -verbose -remote $ECTRANS_ID -source $sfcfile -target $sfcfile -overwrite -remove
+      ectrans -remote $ECTRANS_ID -source $sfcfile -target $sfcfile -overwrite -remove
   fi
 fi
 

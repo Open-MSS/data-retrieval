@@ -2,7 +2,8 @@
 # variable=value
 
 module load cdo
-if [[ $PATH != *"mambaforge/bin"* ]]
+PREF=${CONDA_PREFIX##*/}
+if [[ $PREF != mambaforge && $PREF != ncenv ]]
 then
     PATH=$HOME/mambaforge/bin/:$PATH
 fi
@@ -12,7 +13,7 @@ conda activate ncenv
 # write data to the $SCRATCH directory with more available disk quota
 export WORKDIR=$SCRATCH
 
-export PYTHON=python
+export PYTHON=python3
 export CLEANUP=no
 
 # configure area, grid, and transfer

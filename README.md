@@ -100,7 +100,7 @@ After completing both setups, you can use this script as follows:
   With the trigger, the job ist started when a specific forecast is available,
   e.g. fc00h036 for the 36h forecast. It can be started either form the ecaccess website
   or by typing
-  ecaccess-job-submit -ni fc00h036 get_fc_data.sh (automatic daily job renewal)
+  ecaccess-job-submit -ni fc00h036 bin/get_ecmwf.sh (automatic daily job renewal)
   or
-  ecaccess-job-submit -noReview -ni fc00h036 get_fc_data.sh (job runs once)
+  ecaccess-job-submit -ni fc00h036  -noRenew bin/get_ecmwf.sh (job runs once)
      
