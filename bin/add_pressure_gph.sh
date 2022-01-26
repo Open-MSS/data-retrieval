@@ -6,14 +6,11 @@ export input=$1
 
 TMPDIR=$(mktemp -d) 
 
-echo "Adding geopotential height..."
-cdo gheight -aexpr,"aps=exp(lnsp)" $input $TMPDIR/gph.nc
-
 echo "Adding pressure..."
 cdo pressure_fl -aexpr,"aps=exp(lnsp)" $input $TMPDIR/pressure.nc
 ncrename -vpressure,pres $TMPDIR/pressure.nc
 
 echo "Merging to original file..."
-cdo merge $input $TMPDIR/gph.nc $TMPDIR/pressure.nc $TMPDIR/merged.nc
+cdo merge $input $TMPDIR/pressure.nc $TMPDIR/merged.nc
 mv $TMPDIR/merged.nc $input
 rm -rf $TMPDIR

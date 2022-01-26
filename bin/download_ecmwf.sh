@@ -11,6 +11,8 @@ if [ ! -f grib/${BASE}.ml.grib ]; then
     step=$STEP,
     area=$AREA,
     grid=$GRID,
+    truncation=$TRUNCATION,
+    resol=$RESOL,
     class=od,
     levelist=$MODEL_LEVELS,
     levtype=ml,
@@ -18,6 +20,25 @@ if [ ! -f grib/${BASE}.ml.grib ]; then
     stream=oper,
     type=fc,
     target="grib/${BASE}.ml.grib"
+EOF
+fi
+if [ ! -f grib/${BASE}.ml2.grib ]; then
+    mars <<EOF
+    retrieve,
+    time=$TIME,
+    date=$DATE,
+    step=$STEP,
+    area=$AREA,
+    grid=$GRID,
+    truncation=$TRUNCATION,
+    resol=$RESOL,
+    class=od,
+    levelist=1,
+    levtype=ml,
+    param=$MODEL2_PARAMETERS,
+    stream=oper,
+    type=fc,
+    target="grib/${BASE}.ml2.grib"
 EOF
 fi
 if [ ! -f grib/${BASE}.sfc.grib ]; then
@@ -28,6 +49,8 @@ if [ ! -f grib/${BASE}.sfc.grib ]; then
     step=$STEP,
     area=$AREA,
     grid=$GRID,
+    truncation=$TRUNCATION,
+    resol=$RESOL,
     class=od,
     levtype=sfc,
     param=$SFC_PARAMETERS,
@@ -44,6 +67,8 @@ if [ ! -f grib/${BASE}.pv.grib ]; then
     step=$STEP,
     area=$AREA,
     grid=$GRID,
+    truncation=$TRUNCATION,
+    resol=$RESOL,
     class=od,
     levelist=$PV_LEVELS,
     levtype=pv,
@@ -51,22 +76,5 @@ if [ ! -f grib/${BASE}.pv.grib ]; then
     stream=oper,
     type=fc,
     target="grib/${BASE}.pv.grib"
-EOF
-fi
-if [ ! -f grib/${BASE}.tl.grib ]; then
-    mars <<EOF
-    retrieve,
-    time=$TIME,
-    date=$DATE,
-    step=$STEP,
-    area=$AREA,
-    grid=$GRID,
-    class=od,
-    levelist=$THETA_LEVELS,
-    levtype=pt,
-    param=$THETA_PARAMETERS,
-    stream=oper,
-    type=fc,
-    target="grib/${BASE}.tl.grib"
 EOF
 fi
