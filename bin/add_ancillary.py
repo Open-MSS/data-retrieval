@@ -7,15 +7,18 @@ import itertools
 import optparse
 import os
 import sys
-from metpy.calc import potential_temperature, potential_vorticity_baroclinic, brunt_vaisala_frequency_squared, geopotential_to_height
+
+from metpy.calc import (
+    potential_temperature, potential_vorticity_baroclinic,
+    brunt_vaisala_frequency_squared, geopotential_to_height)
 from metpy.units import units
 import xarray as xr
 
-import netCDF4
 import numpy as np
 import tqdm
 
 VARIABLES = {
+    "pres": ("FULL", "hPa", "air_pressure", "Pressure"),
     "pt": ("FULL", "K", "air_potential_temperature", "Potential Temperature"),
     "pv": ("FULL", "uK m^2 kg^-1 s^-1", "ertel_potential_vorticity", "Potential Vorticity"),
     "n2": ("FULL", "s^-2", "square_of_brunt_vaisala_frequency_in_air", "N^2"),
@@ -51,12 +54,13 @@ def find_tropopause(alts, temps):
     is defined by the same criterion as under (a). This tropopause may be either
     within or above the 1 km layer.
     """
-    dtdz_wmo = -2
-    zmin = 5
-    zmax = 22
+    dtdz_wmo1, dtdz_wmo2 = -2, -3
+    z_crit1, z_crit2 = 2, 1
+    zmin, zmax = 5, 22
+
     alts = np.asarray(alts)
     temps = np.asarray(temps)
-    valid = (~(np.isnan(alts) | np.isnan(temps))) & (alts > 2.0) & (alts < 30.0)
+    valid = (~(np.isnan(alts) | np.isnan(temps))) & (alts > zmin - 3) & (alts < zmax + 3)
     alts, temps = alts[valid], temps[valid]
     if len(alts) < 3:
         return []
@@ -68,12 +72,13 @@ def find_tropopause(alts, temps):
     # This differentiation is sufficient as we are looking at average lapse rate
     # with respect to higher levels anyway, so using a more accurate left/right
     # differentiation does not really improve things here.
-    lapse_rate = (temps[1:] - temps[:-1]) / (alts[1:] - alts[:-1])
+    lapse_rate = np.diff(temps) / np.diff(alts)
+
     lapse_alts = (alts[1:] + alts[:-1]) / 2.
     seek = True
     for j in range(1, len(lapse_rate)):
-        if not seek and lapse_rate[j] < -3:
-            ks = [k for k in range(len(temps)) if lapse_alts[j] <= alts[k] <= lapse_alts[j] + 1.]
+        if not seek and lapse_rate[j] < dtdz_wmo2:
+            ks = np.where((lapse_alts[j] <= alts) & (alts <= lapse_alts[j] + z_crit2))[0]
             # This way of calculating the average lapse rate is optimal. Don't
             # try to improve. Integrate t'/(z1-z0) numerically (no trapez! do it
             # stupid way) with infinitesimal h. Differentiate numerically using
@@ -87,16 +92,17 @@ def find_tropopause(alts, temps):
             else:
                 seek = True
 
-        if seek and lapse_rate[j - 1] <= dtdz_wmo < lapse_rate[j] \
-                and zmin < lapse_alts[j] < zmax:
-            alt = np.interp([dtdz_wmo],
-                            lapse_rate[j - 1:j + 1], lapse_alts[j - 1:j + 1])[0]
+        if seek and lapse_rate[j - 1] <= dtdz_wmo1 < lapse_rate[j]:
+            alt = np.interp(dtdz_wmo1,
+                            lapse_rate[j - 1:j + 1], lapse_alts[j - 1:j + 1])
+            if not (zmin <= alt <= zmax):
+                continue
 
-            ks = [_k for _k in range(len(temps)) if alt <= alts[_k] <= alt + 2.]
+            ks = np.where((alt <= alts) & (alts <= alt + z_crit1))[0]
             if len(ks) > 1:
                 k, ks = ks[0], ks[1:]
                 avg_lapse = (temps[ks] - temps[k]) / (alts[ks] - alts[k])
-                if all(avg_lapse > dtdz_wmo):
+                if all(avg_lapse > dtdz_wmo1):
                     result.append(alt)
                     seek = False
             else:
@@ -111,10 +117,10 @@ def parse_args(args):
 
     Adds PV and ancillary quantities to 4D model data given as NetCDF.
 
-    Usage: add_pv.py [options] <netCDF file>
+    Usage: add_ancillary.py [options] <sfc netCDF file> <ml netCDF file>
 
     Example:
-    add_pv.py ecmwfr_ana_ml_06072912.nc
+    add_ancillary.py ecmwfr_ana_sfc_06072912.nc ecmwfr_ana_ml_06072912.nc
     """)
 
     oppa.add_option('--theta', '', action='store_true',
@@ -123,17 +129,22 @@ def parse_args(args):
                     help="Add n2 static stability.")
     oppa.add_option('--pv', '', action='store_true',
                     help="Add pv potential vorticity.")
+    oppa.add_option('--pressure', '', action='store_true',
+                    help="Add pressure")
     oppa.add_option('--tropopause', '', action='store_true',
                     help="Add first and second tropopause")
     opt, arg = oppa.parse_args(args)
 
-    if len(arg) != 1:
+    if len(arg) != 2:
         print(oppa.get_usage())
         exit(1)
     if not os.path.exists(arg[0]):
+        print("Cannot find model data at", arg[0])
+        exit(1)
+    if not os.path.exists(arg[1]):
         print("Cannot find model data at", arg[1])
         exit(1)
-    return opt, arg[0]
+    return opt, arg[0], arg[1]
 
 
 def my_geopotential_to_height(zh):
@@ -147,15 +158,20 @@ def my_geopotential_to_height(zh):
     return result
 
 
-def add_tropopauses(xin):
+def add_tropopauses(ml, sfc):
     """
     Adds first and second thermal WMO tropopause to model. Fill value is -999.
     """
 
-    temp = (xin["t"].data * units(xin["t"].attrs["units"])).to("K").m
-    press = np.log((xin["pres"].data * units(xin["pres"].attrs["units"])).to("hPa").m)
-    gph = my_geopotential_to_height(xin["zh"]).data.to("km").m
-    theta = (xin["pt"].data * units(xin["pt"].attrs["units"])).to("K").m
+    try:
+        temp = (ml["t"].data * units(ml["t"].attrs["units"])).to("K").m
+        press = np.log((ml["pres"].data * units(ml["pres"].attrs["units"])
+                        ).to("hPa").m)
+        gph = my_geopotential_to_height(ml["z"]).data.to("km").m
+        theta = (ml["pt"].data * units(ml["pt"].attrs["units"])).to("K").m
+    except KeyError as ex:
+        print("Some variables are missing for WMO tropopause calculation:", ex)
+        return sfc
 
     if gph[0, 1, 0, 0] < gph[0, 0, 0, 0]:
         gph = gph[:, ::-1, :, :]
@@ -203,52 +219,85 @@ def add_tropopauses(xin):
             ("TROPOPAUSE_SECOND_PRESSURE", above_tropo2_press * 100),
             ("TROPOPAUSE_THETA", above_tropo1_theta),
             ("TROPOPAUSE_SECOND_THETA", above_tropo2_theta)]:
-        xin[name] = (("time", "lat", "lon"), var.astype(np.float32))
-        xin[name].attrs["units"] = VARIABLES[name][1]
-        xin[name].attrs["standard_name"] = VARIABLES[name][2]
-        xin[name].attrs["long_name"] = VARIABLES[name][3]
-    return xin
-
+        sfc[name] = (("time", "lat", "lon"), var.astype(np.float32))
+        sfc[name].attrs["units"] = VARIABLES[name][1]
+        sfc[name].attrs["standard_name"] = VARIABLES[name][2]
+        sfc[name].attrs["long_name"] = VARIABLES[name][3]
+    return sfc
 
 
 def main():
-    option, filename = parse_args(sys.argv[1:])
+    option, sfc_filename, ml_filename = parse_args(sys.argv[1:])
 
-    xin = xr.load_dataset(filename)
+    sfc = xr.load_dataset(sfc_filename)
+    ml = xr.load_dataset(ml_filename)
 
+    if option.pressure:
+        print("Adding pressure...")
+        try:
+            sp = np.exp(sfc["lnsp"])
+            lev = ml["lev"].data.astype(int) - 1
+            ml["pres"] = (
+                ("time", "lev", "lat", "lon"),
+                (ml["hyam"].data[:][lev][np.newaxis, :, np.newaxis, np.newaxis] +
+                 ml["hybm"].data[:][lev][np.newaxis, :, np.newaxis, np.newaxis] *
+                 sp.data[:][:, np.newaxis, :, :]) / 100)
+        except KeyError as ex:
+            print("Some variables miss for PRES calculation", ex)
+        else:
+            ml["pres"].attrs["units"] = VARIABLES["pres"][1]
+            ml["pres"].attrs["standard_name"] = VARIABLES["pres"][2]
     if option.theta or option.pv:
         print("Adding potential temperature...")
-        xin["pt"] = potential_temperature(xin["pres"], xin["t"])
-        xin["pt"].data = xin["pt"].data.to(VARIABLES["pt"][1]).m
-        xin["pt"].attrs["units"] = VARIABLES["pt"][1]
-        xin["pt"].attrs["standard_name"] = VARIABLES["pt"][2]
+        try:
+            ml["pt"] = potential_temperature(ml["pres"], ml["t"])
+        except KeyError as ex:
+            print("Some variables miss for THETA calculation", ex)
+        else:
+            ml["pt"].data = ml["pt"].data.to(VARIABLES["pt"][1]).m
+            ml["pt"].attrs["units"] = VARIABLES["pt"][1]
+            ml["pt"].attrs["standard_name"] = VARIABLES["pt"][2]
     if option.pv:
         print("Adding potential vorticity...")
-        xin = xin.metpy.assign_crs(grid_mapping_name='latitude_longitude',
-                                   earth_radius=6.356766e6)
-        xin["pv"] = potential_vorticity_baroclinic(xin["pt"], xin["pres"], xin["u"], xin["v"])
-        xin["pv"].data = xin["pv"].data.to(VARIABLES["pv"][1]).m
-        xin = xin.drop("metpy_crs")
-        xin["pv"].attrs["units"] = VARIABLES["pv"][1]
-        xin["pv"].attrs["standard_name"] = VARIABLES["pv"][2]
+        try:
+            ml = ml.metpy.assign_crs(grid_mapping_name='latitude_longitude',
+                                     earth_radius=6.356766e6)
+            ml["pv"] = potential_vorticity_baroclinic(
+                ml["pt"], ml["pres"], ml["u"], ml["v"])
+        except KeyError as ex:
+            print("Some variables miss for PV calculation", ex)
+        else:
+            ml["pv"].data = ml["pv"].data.to(VARIABLES["pv"][1]).m
+            ml["pv"].attrs["units"] = VARIABLES["pv"][1]
+            ml["pv"].attrs["standard_name"] = VARIABLES["pv"][2]
+        finally:
+            ml = ml.drop("metpy_crs")
     if option.n2:
         print("Adding N2...")
-        xin["n2"] = brunt_vaisala_frequency_squared(my_geopotential_to_height(xin["zh"]), xin["pt"])
-        xin["n2"].data = xin["n2"].data.to(VARIABLES["n2"][1])
-        xin["n2"].attrs["units"] = VARIABLES["n2"][1]
-        xin["n2"].attrs["standard_name"] = "square_of_brunt_vaisala_frequency_in_air"
+        try:
+            ml["n2"] = brunt_vaisala_frequency_squared(
+                my_geopotential_to_height(ml["z"]), ml["pt"])
+        except KeyError as ex:
+            print("Some variables miss for N2 calculation", ex)
+        else:
+            ml["n2"].data = ml["n2"].data.to(VARIABLES["n2"][1]).m
+            ml["n2"].attrs["units"] = VARIABLES["n2"][1]
+            ml["n2"].attrs["standard_name"] = VARIABLES["n2"][2]
     if option.tropopause:
         print("Adding first and second tropopause")
-        xin = add_tropopauses(xin)
+        sfc = add_tropopauses(ml, sfc)
 
-    now = datetime.datetime.now().isoformat()
-    history = now + ":" + " ".join(sys.argv)
-    if "history" in xin.attrs:
-        history += "\n" + xin.attrs["history"]
-    xin.attrs["history"] = history
-    xin.attrs["date_modified"] = now
+    for xin in [ml, sfc]:
+        now = datetime.datetime.now().isoformat()
+        history = now + ":" + " ".join(sys.argv)
+        if "history" in xin.attrs:
+            history += "\n" + xin.attrs["history"]
+        xin.attrs["history"] = history
+        xin.attrs["date_modified"] = now
 
-    xin.to_netcdf(filename)
+    sfc.to_netcdf(sfc_filename, format="NETCDF4_CLASSIC")
+    # no compression, yet, as ml is still converted by ncks
+    ml.to_netcdf(ml_filename, format="NETCDF4_CLASSIC")
 
 
 if __name__ == "__main__":

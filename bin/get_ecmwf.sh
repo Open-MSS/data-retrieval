@@ -15,6 +15,12 @@
 
 # Define model domain sector, resolution and id name for ectrans in settings.config
 
+# defines for performance measurements
+N=`date +%s%N`
+export PS4='+[$(((`date +%s%N`-$N)/1000000))ms][${BASH_SOURCE}:${LINENO}]: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+# enable line below for debugging and performance timing
+# set -x
+
 export MAINDIR=$HOME/data-retrieval
 export BINDIR=$MAINDIR/bin
 
@@ -69,7 +75,7 @@ mkdir -p grib
 export DATE=${YEAR}-${MONTH}-${DAY}
 export YMD=${YEAR}${MONTH}${DAY}
 export TIME=${HH}:00:00
-export BASE=ecmwf_${YMD}_${HH}.${FCSTEP}
+export BASE=${DATASET}.${YMD}T${HH}.${FCSTEP}
 export init_date=$(date +%Y-%m-%dT%H:%M:%S)
 echo $BASE
 
@@ -80,7 +86,7 @@ fi
 export time_units="hours since ${init_date}"
 
 # Retrieve ml, sfc, pv and pt files
-$BINDIR/download_ecmwf.sh
+. $BINDIR/download_ecmwf.sh
 
 # Convert grib to netCDF, set init time
 . $BINDIR/convert.sh
@@ -105,9 +111,14 @@ if ecaccess-association-list | grep -q $ECTRANS_ID; then
   fi
 fi
 
-if [[ $CLEANUP == "yes" ]]
+if [[ x$CLEANUP == x"yes" ]]
 then
   # clean up locally
-  rm -f $mlfile $tlfile $plfile $pvfile $alfile $sfcfile
-  rm -f grib/${BASE}*.grib
+  for f in $mlfile $tlfile $plfile $pvfile $alfile $sfcfile grib/${BASE}*.grib;
+  do
+      if [ -f $f ];
+      then
+          rm $f
+      fi
+  done
 fi

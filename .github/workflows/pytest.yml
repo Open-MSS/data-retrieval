@@ -1,0 +1,35 @@
+name: Pytest MSS
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+env:
+  PAT: ${{ secrets.PAT }}
+
+jobs:
+  Test-MSS:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - name: Install dependencies
+      run: |
+        sudo apt install nco cdo libeccodes-tools \
+        && python -m pip install --upgrade pip cdsapi cfgrib eccodes MetPy tqdm xarray numpy netCDF4 pytest
+
+    - name: Run tests
+      timeout-minutes: 25
+      run: |
+        cd $GITHUB_WORKSPACE \
+        && pytest -v --durations=20
+

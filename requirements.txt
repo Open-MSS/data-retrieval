@@ -1,6 +1,10 @@
 cdsapi
+cfgrib
+eccodes
+python-eccodes
 MetPy
 tqdm
 xarray
 numpy
 netCDF4
+pytest

@@ -2,6 +2,8 @@
 # variable=value
 
 module load cdo
+module load nco
+
 PREF=${CONDA_PREFIX##*/}
 if [[ $PREF != mambaforge && $PREF != ncenv ]]
 then

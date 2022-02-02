@@ -32,7 +32,7 @@ export time_units="hours since ${init_date}"
 
 # Download ml, sfc, pv and pt files
 echo "Downloading files, this might take a long time!"
-$PYTHON bin/download_cds.py
+$PYTHON $BINDIR/download_cds.py
 
 . $BINDIR/convert.sh
 

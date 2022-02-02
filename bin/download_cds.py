@@ -36,20 +36,20 @@ def ml():
     }), f'grib/{date}T{time}.an.ml.grib')
 
 
+def ml2():
+    c_ml.retrieve('reanalysis-era5-complete', dict(request, **{
+        'levelist': '1',
+        'levtype': 'ml',
+        'param': os.environ["MODEL2_PARAMETERS"],
+    }), f'grib/{date}T{time}.an.ml2.grib')
+
+
 def pv():
     c_pv.retrieve('reanalysis-era5-complete', dict(request, **{
         'levelist': os.environ["PV_LEVELS"],
         'levtype': 'pv',
         'param': os.environ["PV_PARAMETERS"],
     }), f'grib/{date}T{time}.an.pv.grib')
-
-
-def tl():
-    c_tl.retrieve('reanalysis-era5-complete', dict(request, **{
-        'levelist': os.environ["THETA_LEVELS"],
-        'levtype': 'pt',
-        'param': os.environ["THETA_PARAMETERS"],
-    }), f'grib/{date}T{time}.an.tl.grib')
 
 
 def sfc():
@@ -60,9 +60,9 @@ def sfc():
 
 
 threads = []
-for levtype in [["ml", ml], ["pv", pv], ["tl", tl], ["sfc", sfc]]:
-    if not os.path.isfile(f'grib/{date}T{time}.an.{levtype[0]}.grib'):
-        threads.append(Thread(target=levtype[1]))
+for levtype in ["ml", "ml2", "pv", "sfc"]:
+    if not os.path.isfile(f'grib/{date}T{time}.an.{levtype}.grib'):
+        threads.append(Thread(target=globals()[levtype]))
 
 for thread in threads:
     thread.start()
