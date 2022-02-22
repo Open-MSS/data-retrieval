@@ -137,13 +137,15 @@ def parse_args(args):
 
     if len(arg) != 2:
         print(oppa.get_usage())
-        exit(1)
+        sys.exit(1)
     if not os.path.exists(arg[0]):
         print("Cannot find model data at", arg[0])
-        exit(1)
+        sys.exit(1)
     if not os.path.exists(arg[1]):
         print("Cannot find model data at", arg[1])
-        exit(1)
+        sys.exit(1)
+    if not (opt.theta or opt.n2 or opt.pv or opt.pressure or opt.tropopause):
+        sys.exit(0)
     return opt, arg[0], arg[1]
 
 
