@@ -229,8 +229,8 @@ def add_tropopauses(ml, sfc):
 def main():
     option, sfc_filename, ml_filename = parse_args(sys.argv[1:])
 
-    sfc = xr.load_dataset(sfc_filename)
-    ml = xr.load_dataset(ml_filename)
+    sfc = xr.open_dataset(sfc_filename)
+    ml = xr.open_dataset(ml_filename)
 
     if option.pressure:
         print("Adding pressure...")
