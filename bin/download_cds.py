@@ -22,7 +22,7 @@ request = {
         'date': date,
         'expver': '1',
         'stream': 'oper',
-        'type': 'an',
+        'type': os.environ["CDS_TYPE"],
         "area": os.environ["AREA"],
         "grid": os.environ["GRID"],
     }
@@ -45,6 +45,8 @@ def ml2():
 
 
 def pv():
+    if os.environ["PV_LEVELS"] == "":
+        return
     c_pv.retrieve('reanalysis-era5-complete', dict(request, **{
         'levelist': os.environ["PV_LEVELS"],
         'levtype': 'pv',
