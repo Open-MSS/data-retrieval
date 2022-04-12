@@ -114,14 +114,16 @@ def main():
         # iterate step
         for time in codes_index_get(idx, 'time'):
             codes_index_select(idx, 'time', time)
-            values = get_initial_values(idx, keep_sample=True)
-            if 'height' in args:
-                values['height'] = args.height
-                values['gh'] = args.height * R_G + values['z']
-            if 'levelist' in args:
-                values['levelist'] = args.levelist
+            values = None
             # iterate step all but geopotential z which is always step 0 (an)
             for step in codes_index_get(idx, 'step'):
+                if values is None:
+                    values = get_initial_values(idx, step=step, keep_sample=True)
+                    if 'height' in args:
+                        values['height'] = args.height
+                        values['gh'] = args.height * R_G + values['z']
+                    if 'levelist' in args:
+                        values['levelist'] = args.levelist
                 codes_index_select(idx, 'step', step)
                 # surface pressure
                 try:
@@ -140,10 +142,10 @@ def main():
     fout.close()
 
 
-def get_initial_values(idx, keep_sample=False):
+def get_initial_values(idx, step, keep_sample=False):
     '''Get the values of surface z, pv and number of levels '''
     codes_index_select(idx, 'level', 1)
-    codes_index_select(idx, 'step', 0)
+    codes_index_select(idx, 'step', step)
     codes_index_select(idx, 'shortName', 'z')
     gid = codes_new_from_index(idx)
 
