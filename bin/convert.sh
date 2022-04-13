@@ -28,7 +28,9 @@ if [ ! -f grib/${BASE}.pv.grib ]; then
 fi
 
 echo adding gph
-$PYTHON $BINDIR/compute_geopotential_on_ml.py grib/${BASE}.ml2.grib grib/${BASE}.ml.grib -o ${tmpfile}
+ls
+$PYTHON $BINDIR/compute_geopotential_on_ml.py grib/${BASE}.ml.grib grib/${BASE}.ml2.grib -o ${tmpfile}
+ls
 cdo -f nc4c -t ecmwf copy ${tmpfile} ${tmpfile}_z
 ncatted -O \
     -a standard_name,z,o,c,geopotential_height \
