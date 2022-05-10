@@ -47,7 +47,7 @@ ncatted -O \
     -a units,cc,o,c,dimensionless \
     -a units,time,o,c,"${time_units}" \
     $mlfile
-cdo merge ${tmpfile}_z ${mlfile} ${tmpfile}
+cdo merge ${mlfile} ${tmpfile}_z ${tmpfile}
 mv ${tmpfile} $mlfile 
 rm ${tmpfile}_z
 
