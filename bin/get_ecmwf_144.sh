@@ -166,7 +166,7 @@ fi
 if [[ x$CLEANUP == x"yes" ]]
 then
   # clean up locally
-  for f in $mlfile $tlfile $plfile $pvfile $alfile $sfcfile $sfcfile_ancillary $mlfile_u $mlfile_v $mlfile_uv mss/${BASE}.tmp grib/${BASE}*.grib;
+  for f in $mlfile $tlfile $plfile $pvfile $alfile $sfcfile $sfcfile_ancillary $mlfile_u $mlfile_v $mlfile_uv mss/${BASE}.tmp_z mss/${BASE}.tmp grib/${BASE}*.grib;
   do
       if [ -f $f ];
       then

@@ -8,6 +8,7 @@ export mlfile_v=mss/${BASE}.ml_v.nc
 export mlfile_uv=mss/${BASE}.ml_uv.nc
 export mlfile_tq=mss/${BASE}.ml_tq.nc
 export plfile=mss/${BASE}.pl.nc
+export pvfile=mss/${BASE}.pv.nc
 export alfile=mss/${BASE}.al.nc
 export tlfile=mss/${BASE}.tl.nc
 export sfcfile=mss/${BASE}.sfc.nc

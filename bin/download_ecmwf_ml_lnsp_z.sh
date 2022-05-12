@@ -17,7 +17,9 @@ if [ ! -f grib/${BASE}.ml_lnsp_z.grib ]; then
     param=LNSP/Z,
     stream=oper,
     type=fc,
-    target="grib/${BASE}.ml_lnsp_z.grib"
+    target="grib/${BASE}.ml_lnsp_z.grib_tmp"
 EOF
 fi
+#avoid that download_ecmwf_sfc.sh access incomplete grib-file
+mv grib/${BASE}.ml_lnsp_z.grib_tmp grib/${BASE}.ml_lnsp_z.grib
 
