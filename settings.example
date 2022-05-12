@@ -17,11 +17,54 @@ export WORKDIR=$SCRATCH
 
 export PYTHON=python3
 export CLEANUP=no
+#export MODEL_REDUCTION="-d lev,0,0 -d lev,16,28,4 -d lev,32,124,2"
+export MODEL_REDUCTION=
 
-# configure area, grid, and transfer
-export AREA=75/-15/30/42.5
-export GRID=1.0/1.0
-export ECTRANS_ID=MSS-Data-Transfer
+# definition of parameters and levels to read
+export MODEL_LEVELS=61/to/137
+#export MODEL_LEVELS=1/to/137
+export PV_LEVELS=2000
+#export THETA_LEVELS=330/350/370/395/475
+export THETA_LEVELS=
+
+# mars request seems most efficient in max. pairs of two (wind components take twice as long as other vars, use single request)
+# obligatorily retrieved: LNSP/Z/U/V/T/Q
+# additional parameters (adjust standardnames/units in convert.sh for nc-files if you change)
+export MODEL_PARAMETERS1=W
+export MODEL_PARAMETERS2=CC
+export MODEL_PARAMETERS3=CLWC/CIWC
+export MODEL_PARAMETERS4=O3
+export MODEL_PARAMETERS5=D
+
+export SFC_PARAMETERS=MSL/10U/10V/LCC/MCC/HCC/BLH/CI/LSM/SSTK
+export PV_PARAMETERS=Z/PRES/PT/U/V/Q/O3
+export THETA_PARAMETERS=PRESS/PV/U/V/Q/D/O3
+
+export PRES_FROM_MARS=yes
+export PRES_PARAMETERS=U/V/W/T/D/Q/Z/O3/PV
+export PRES_LEVELS=925/850/700/500/400/300/250/150
+export GPH_LEVELS=
+#export GPH_LEVELS=0/250/500/750/1000/1250/1500/1750/2000/2250/2500/2750/3000/3250/3500/3750/4000/4250/4500/4750/5000/5250/5500/5750/6000/6250/6500/6750/7000/7250/7500/7750/8000/8250/8500/8750/9000/9250/9500/9750/10000/10250/10500/10750/11000/11250/11500/11750/12000/12250/12500/12750/13000/13250/13500/13750/14000/14250/14500/14750/15000
+
+#additional parameters (for add_ancillery.sh)
+export ANCILLARY="--pv --pressure --theta"
+#export ANCILLARY="--pv --theta --tropopause --n2 --pressure"
+
+#data transfer and mars request settings
+export ECTRANS_ID=
+
+# configure area, grid
+#1 deg grid resolution
+#export DATASET=ecmwf_forecast.US_LL100
+#export AREA=50.0/-90.0/20.0/-40.0 # sub-area of data to be extracted: N/W/S/E
+#export GRID=1.0/1.0
+#export TRUNCATION=auto #options: none, auto, TXXX (e.g. T21)
+#export RESOL=auto        #otpions: av (archived), auto, TXXX(e.g. T21); truncation shall replace resol but resol is still needed
+#0.15 deg grid resolution
+export DATASET=ecmwf_forecast.US_LL015
+export GRID=0.15/0.15
+export TRUNCATION=none #options: none, auto, TXXX (e.g. T21)
+export RESOL=av        #otpions: av (archived), auto, TXXX(e.g. T21); truncation shall replace resol but resol is still needed
 
 # set init and forecast times for testing
 # (default 36h from today 00:00) 
@@ -32,4 +75,8 @@ export YEAR=`date +%Y`
 export HH=00
 export FCSTEP=036
 export STEP=0/to/36/by/6
+#export FCSTEP=072
+#export STEP=39/to/72/by/3
+#export FCSTEP=144
+#export STEP=78/to/144/by/6
 

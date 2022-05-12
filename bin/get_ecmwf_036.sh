@@ -7,7 +7,7 @@
 #SBATCH --job-name=get_ecmwf
 #SBATCH --output=get_ecmwf.%j.out
 #SBATCH --error=get_ecmwf.%j.out
-#SBATCH --workdir=$HOME/data-retrieval/batch_out/
+#SBATCH --workdir=/home/ms/spdescan/ddp/mss_wms/data_retrieval_for_ipa_mss_wms_comet2/data-retrieval/batch_out/
 
 
 # This script works with the cdo version installed on ECACCESS and 
@@ -22,17 +22,17 @@ export PS4='+[$(((`date +%s%N`-$N)/1000000))ms][${BASH_SOURCE}:${LINENO}]: ${FUN
 # enable line below for debugging and performance timing
 # set -x
 
-export MAINDIR=$HOME/data-retrieval/
+export MAINDIR=$HOME/mss_wms/data_retrieval_for_ipa_mss_wms_comet2/data-retrieval/
 export BINDIR=$MAINDIR/bin
 
 . ${MAINDIR}/settings.default
 
-if [ ! -f ${MAINDIR}/settings.config ]; then
-    echo Please copy the settings.example to settings.config and configure your setup!
+if [ ! -f ${MAINDIR}/settings_036.config ]; then
+    echo Please copy the settings.example to settings_036.config and configure your setup!
     exit 1
 fi
 
-. ${MAINDIR}/settings.config
+. ${MAINDIR}/settings_036.config
 
 # get forecast date
 # If used as a shell script that is run on a event trigger,
@@ -92,6 +92,7 @@ if [ x$PRES_FROM_MARS == x"yes" ]; then
   date
   . $BINDIR/download_ecmwf_pl.sh &
 fi
+
 # Retrieve ml, sfc, pv and pt files
 echo "Run mars request for data ml lnsp/Z..."
 date 
@@ -139,7 +140,6 @@ if [[ x$MODEL_PARAMETERS5 != x"" ]]; then
    date 
    . $BINDIR/download_ecmwf_ml_para5.sh &
 fi
-
 
 # Convert grib to netCDF, set init time
 wait

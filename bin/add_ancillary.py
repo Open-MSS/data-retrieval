@@ -158,17 +158,17 @@ def my_geopotential_to_height(zh):
     return result
 
 
-def add_tropopauses(ml, sfc):
+def add_tropopauses(ml, ml_uv, sfc):
     """
     Adds first and second thermal WMO tropopause to model. Fill value is -999.
     """
 
     try:
         temp = (ml["t"].data * units(ml["t"].attrs["units"])).to("K").m
-        press = np.log((ml["pres"].data * units(ml["pres"].attrs["units"])
+        press = np.log((ml_uv["pres"].data * units(ml_uv["pres"].attrs["units"])
                         ).to("hPa").m)
         gph = my_geopotential_to_height(ml["z"]).data.to("km").m
-        theta = (ml["pt"].data * units(ml["pt"].attrs["units"])).to("K").m
+        theta = (ml_uv["pt"].data * units(ml_uv["pt"].attrs["units"])).to("K").m
     except KeyError as ex:
         print("Some variables are missing for WMO tropopause calculation:", ex)
         return sfc
@@ -223,21 +223,22 @@ def add_tropopauses(ml, sfc):
         sfc[name].attrs["units"] = VARIABLES[name][1]
         sfc[name].attrs["standard_name"] = VARIABLES[name][2]
         sfc[name].attrs["long_name"] = VARIABLES[name][3]
-    return sfc
+    sfc_tmp=sfc[["TROPOPAUSE","TROPOPAUSE_SECOND","TROPOPAUSE_PRESSURE","TROPOPAUSE_SECOND_PRESSURE","TROPOPAUSE_THETA","TROPOPAUSE_SECOND_THETA"]]
+    return sfc_tmp
 
 
 def main():
     option, sfc_filename, ml_filename = parse_args(sys.argv[1:])
 
-    sfc = xr.load_dataset(sfc_filename)
-    ml = xr.load_dataset(ml_filename)
-
+    sfc = xr.open_dataset(sfc_filename)
+    ml = xr.open_dataset(ml_filename)
+    ml_uv=ml[["u","v"]]
     if option.pressure:
         print("Adding pressure...")
         try:
             sp = np.exp(sfc["lnsp"])
             lev = ml["lev"].data.astype(int) - 1
-            ml["pres"] = (
+            ml_uv["pres"] = (
                 ("time", "lev", "lat", "lon"),
                 (ml["hyam"].data[:][lev][np.newaxis, :, np.newaxis, np.newaxis] +
                  ml["hybm"].data[:][lev][np.newaxis, :, np.newaxis, np.newaxis] *
@@ -245,59 +246,63 @@ def main():
         except KeyError as ex:
             print("Some variables miss for PRES calculation", ex)
         else:
-            ml["pres"].attrs["units"] = VARIABLES["pres"][1]
-            ml["pres"].attrs["standard_name"] = VARIABLES["pres"][2]
+            ml_uv["pres"].attrs["units"] = VARIABLES["pres"][1]
+            ml_uv["pres"].attrs["standard_name"] = VARIABLES["pres"][2]
     if option.theta or option.pv:
         print("Adding potential temperature...")
         try:
-            ml["pt"] = potential_temperature(ml["pres"], ml["t"])
+            ml_uv["pt"] = potential_temperature(ml_uv["pres"], ml["t"])
         except KeyError as ex:
             print("Some variables miss for THETA calculation", ex)
         else:
-            ml["pt"].data = ml["pt"].data.to(VARIABLES["pt"][1]).m
-            ml["pt"].attrs["units"] = VARIABLES["pt"][1]
-            ml["pt"].attrs["standard_name"] = VARIABLES["pt"][2]
+            ml_uv["pt"].data = ml_uv["pt"].data.to(VARIABLES["pt"][1]).m
+            ml_uv["pt"].attrs["units"] = VARIABLES["pt"][1]
+            ml_uv["pt"].attrs["standard_name"] = VARIABLES["pt"][2]
     if option.pv:
         print("Adding potential vorticity...")
         try:
-            ml = ml.metpy.assign_crs(grid_mapping_name='latitude_longitude',
+            ml_uv = ml_uv.metpy.assign_crs(grid_mapping_name='latitude_longitude',
                                      earth_radius=6.356766e6)
-            ml["pv"] = potential_vorticity_baroclinic(
-                ml["pt"], ml["pres"], ml["u"], ml["v"])
+            #pv calculation (out of memory for large areas and high-res grid)
+            ml_uv["pv"] = potential_vorticity_baroclinic(
+                ml_uv["pt"], ml_uv["pres"], ml_uv["u"], ml_uv["v"])
         except KeyError as ex:
             print("Some variables miss for PV calculation", ex)
         else:
-            ml["pv"].data = ml["pv"].data.to(VARIABLES["pv"][1]).m
-            ml["pv"].attrs["units"] = VARIABLES["pv"][1]
-            ml["pv"].attrs["standard_name"] = VARIABLES["pv"][2]
+            ml_uv["pv"].data = ml_uv["pv"].data.to(VARIABLES["pv"][1]).m
+            ml_uv["pv"].attrs["units"] = VARIABLES["pv"][1]
+            ml_uv["pv"].attrs["standard_name"] = VARIABLES["pv"][2]
         finally:
-            ml = ml.drop("metpy_crs")
+            ml_uv = ml_uv.drop("metpy_crs")
     if option.n2:
         print("Adding N2...")
         try:
-            ml["n2"] = brunt_vaisala_frequency_squared(
-                my_geopotential_to_height(ml["z"]), ml["pt"])
+            ml_uv["n2"] = brunt_vaisala_frequency_squared(
+                my_geopotential_to_height(ml["z"]), ml_uv["pt"])
         except KeyError as ex:
             print("Some variables miss for N2 calculation", ex)
         else:
-            ml["n2"].data = ml["n2"].data.to(VARIABLES["n2"][1]).m
-            ml["n2"].attrs["units"] = VARIABLES["n2"][1]
-            ml["n2"].attrs["standard_name"] = VARIABLES["n2"][2]
+            ml_uv["n2"].data = ml_uv["n2"].data.to(VARIABLES["n2"][1]).m
+            ml_uv["n2"].attrs["units"] = VARIABLES["n2"][1]
+            ml_uv["n2"].attrs["standard_name"] = VARIABLES["n2"][2]
     if option.tropopause:
         print("Adding first and second tropopause")
-        sfc = add_tropopauses(ml, sfc)
+        sfc_tmp = add_tropopauses(ml, ml_uv, sfc)
 
-    for xin in [ml, sfc]:
+    for xin in [ml_uv]:
         now = datetime.datetime.now().isoformat()
         history = now + ":" + " ".join(sys.argv)
         if "history" in xin.attrs:
             history += "\n" + xin.attrs["history"]
         xin.attrs["history"] = history
         xin.attrs["date_modified"] = now
-
-    sfc.to_netcdf(sfc_filename, format="NETCDF4_CLASSIC")
+    
+    if option.tropopause: 
+        sfc_tmp.to_netcdf(sfc_filename+"ancillary", format="NETCDF4_CLASSIC")
     # no compression, yet, as ml is still converted by ncks
-    ml.to_netcdf(ml_filename, format="NETCDF4_CLASSIC")
+    ml_uv.to_netcdf(ml_filename+"ancillary", format="NETCDF4_CLASSIC")
+    sfc.close()
+    ml.close()
 
 
 if __name__ == "__main__":

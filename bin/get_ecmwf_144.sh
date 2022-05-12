@@ -7,7 +7,7 @@
 #SBATCH --job-name=get_ecmwf
 #SBATCH --output=get_ecmwf.%j.out
 #SBATCH --error=get_ecmwf.%j.out
-#SBATCH --workdir=$HOME/data-retrieval/batch_out/
+#SBATCH --workdir=/home/ms/spdescan/ddp/mss_wms/data_retrieval_for_ipa_mss_wms_comet2/data-retrieval/batch_out/
 
 
 # This script works with the cdo version installed on ECACCESS and 
@@ -22,23 +22,23 @@ export PS4='+[$(((`date +%s%N`-$N)/1000000))ms][${BASH_SOURCE}:${LINENO}]: ${FUN
 # enable line below for debugging and performance timing
 # set -x
 
-export MAINDIR=$HOME/data-retrieval/
+export MAINDIR=$HOME/mss_wms/data_retrieval_for_ipa_mss_wms_comet2/data-retrieval/
 export BINDIR=$MAINDIR/bin
 
 . ${MAINDIR}/settings.default
 
-if [ ! -f ${MAINDIR}/settings.config ]; then
-    echo Please copy the settings.example to settings.config and configure your setup!
+if [ ! -f ${MAINDIR}/settings_144.config ]; then
+    echo Please copy the settings.example to settings_144.config and configure your setup!
     exit 1
 fi
 
-. ${MAINDIR}/settings.config
+. ${MAINDIR}/settings_144.config
 
 # get forecast date
 # If used as a shell script that is run on a event trigger,
 # the $MSJ* environment variables contain the corresponding time info.
 # This can be done from the web interface or e.g. by the command
-#    ecaccess-job-submit -ni fc00h036 get_ecmwf.sh
+#    ecaccess-job-submit -ni fc00h144 get_ecmwf.sh
 # If these variables are empty, forecast times are defined in settings.config
 
 

@@ -1,0 +1,1014 @@
+load netcdf4 4.7.4 (PATH, MANPATH, netCDF, NETCDF_VERSION, NETCDF_INCLUDE, NETCDF_LIB, EC_FFLAGS, EC_CFLAGS, EC_CXXFLAGS, EC_FLDFLAGS,EC_CLDFLAGS, EC_CXXLDFLAGS)
+load cdo 1.9.10-01 (PATH)
+load nco 4.9.7 (PATH,MANPATH)
+load python3 3.8.8-01 (PATH, MANPATH)
+ecmwf_forecast.US_LL015.20220512T00.072
+Run mars request for data on pl...
+Thu May 12 14:13:33 GMT 2022
+Run mars request for data ml lnsp/Z...
+Thu May 12 14:13:33 GMT 2022
+Run mars request for data on 2pv...
+Thu May 12 14:13:33 GMT 2022
+Run mars request for data ml T/Q...
+Thu May 12 14:13:33 GMT 2022
+Run mars request for data ml u...
+Thu May 12 14:13:33 GMT 2022
+Run mars request for data ml v...
+Thu May 12 14:13:33 GMT 2022
+Run mars request for data sfc...
+Thu May 12 14:13:33 GMT 2022
+Run mars request for data ml parameters 1...
+Thu May 12 14:13:33 GMT 2022
+Run mars request for data ml parameters 2...
+Thu May 12 14:13:33 GMT 2022
+Run mars request for data ml parameters 3...
+Thu May 12 14:13:33 GMT 2022
+Run mars request for data ml parameters 4...
+Thu May 12 14:13:33 GMT 2022
+Run mars request for data ml parameters 5...
+Thu May 12 14:13:33 GMT 2022
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+MIR environment variables:
+MIR environment variables:
+MIR environment variables:
+MIR environment variables:
+MIR_CACHE_PATH=/tmp/cache
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+MIR_CACHE_PATH=/tmp/cache
+MIR_CACHE_PATH=/tmp/cache
+MIR_CACHE_PATH=/tmp/cache
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+MIR environment variables:
+MIR_CACHE_PATH=/tmp/cache
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+MIR environment variables:
+MIR environment variables:
+MIR_CACHE_PATH=/tmp/cache
+MIR_CACHE_PATH=/tmp/cache
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+MIR environment variables:
+MIR environment variables:
+MIR environment variables:
+MIR environment variables:
+MIR_CACHE_PATH=/tmp/cache
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+MIR_CACHE_PATH=/tmp/cache
+MIR_CACHE_PATH=/tmp/cache
+MIR_CACHE_PATH=/tmp/cache
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+mars - WARN - 
+mars - WARN - Due to the migration of our meteorological archive, there will be no or 
+mars - WARN - degraded access to the archive at times between February 2022 and June 2022. 
+mars - WARN - Please visit our dedicated confluence space for more information.
+mars - WARN - https://confluence.ecmwf.int/x/qv9CDQ 
+mars - WARN - 
+MIR environment variables:
+MIR_CACHE_PATH=/tmp/cache
+Using MARS binary: /usr/local/apps/mars/versions/20220424202857/bin/mars.bin
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - Welcome to MARS
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS_HOME=/usr/local/apps/mars/configs/prod
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - MARS Client build stamp: 20220424202857
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - MARS Client bundle version: 6.33.10.0
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package mars-client version: 6.33.10
+mars - INFO   - 20220512.141334 - package mir version: 1.12.1
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+mars - INFO   - 20220512.141334 - package odc version: 1.4.4
+mars - INFO   - 20220512.141334 - package fdb version: 5.10.7
+mars - INFO   - 20220512.141334 - package metkit version: 1.9.1
+mars - INFO   - 20220512.141334 - package eckit version: 1.19.0
+mars - INFO   - 20220512.141334 - package eccodes version: 2.25.1
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levelist=1,
+    levtype=ml,
+    param=LNSP/Z,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.ml_lnsp_z.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levelist=2000,
+    levtype=pv,
+    param=Z/PRES/PT/U/V/Q/O3,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.pv.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levelist=61/to/137,
+    levtype=ml,
+    param=CLWC/CIWC,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.ml3.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levelist=925/850/700/500/400/300/250/150,
+    levtype=pl,
+    param=U/V/W/T/D/Q/Z/O3/PV,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.pl.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levelist=61/to/137,
+    levtype=ml,
+    param=O3,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.ml4.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levelist=61/to/137,
+    levtype=ml,
+    param=T/Q,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.ml_tq.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levelist=61/to/137,
+    levtype=ml,
+    param=W,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.ml1.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levtype=sfc,
+    param=MSL/10U/10V/LCC/MCC/HCC/BLH/CI/LSM/SSTK,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.sfc.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levelist=61/to/137,
+    levtype=ml,
+    param=U,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.ml_u.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = SH,
+    LEVTYPE    = ML,
+    LEVELIST   = 1,
+    PARAM      = 152/129,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.ml_lnsp_z.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 24 fields
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod3:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod3', local port is 35172
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = SH,
+    LEVTYPE    = PV,
+    LEVELIST   = 2000,
+    PARAM      = 129/054/003/131/132/133/203.128,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.pv.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 84 fields
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 35172
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod', local port is 44522
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levelist=61/to/137,
+    levtype=ml,
+    param=CC,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.ml2.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 44522
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = SH,
+    LEVTYPE    = ML,
+    LEVELIST   = 61/62/63/64/65/66/67/68/69/70/71/72/73/74/75/76/77/78/79/80/81/82/83/84/85/86/87/88/89/90/91/92/93/94/95/96/97/98/99/100/101/102/103/104/105/106/107/108/109/110/111/112/113/114/115/116/117/118/119/120/121/122/123/124/125/126/127/128/129/130/131/132/133/134/135/136/137,
+    PARAM      = 246/247,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.ml3.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 1848 fields
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod3:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod3', local port is 51636
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 51636
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = SH,
+    LEVTYPE    = PL,
+    LEVELIST   = 925/850/700/500/400/300/250/150,
+    PARAM      = 131/132/135/130/155/133/129/203.128/060,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.pl.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 864 fields
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod', local port is 43211
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 43211
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = SH,
+    LEVTYPE    = ML,
+    LEVELIST   = 61/62/63/64/65/66/67/68/69/70/71/72/73/74/75/76/77/78/79/80/81/82/83/84/85/86/87/88/89/90/91/92/93/94/95/96/97/98/99/100/101/102/103/104/105/106/107/108/109/110/111/112/113/114/115/116/117/118/119/120/121/122/123/124/125/126/127/128/129/130/131/132/133/134/135/136/137,
+    PARAM      = 130/133,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.ml_tq.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 1848 fields
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod', local port is 39777
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 39777
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levelist=61/to/137,
+    levtype=ml,
+    param=V,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.ml_v.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = SH,
+    LEVTYPE    = ML,
+    LEVELIST   = 61/62/63/64/65/66/67/68/69/70/71/72/73/74/75/76/77/78/79/80/81/82/83/84/85/86/87/88/89/90/91/92/93/94/95/96/97/98/99/100/101/102/103/104/105/106/107/108/109/110/111/112/113/114/115/116/117/118/119/120/121/122/123/124/125/126/127/128/129/130/131/132/133/134/135/136/137,
+    PARAM      = 135,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.ml1.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 924 fields
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod3:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod3', local port is 58973
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = SH,
+    LEVTYPE    = ML,
+    LEVELIST   = 61/62/63/64/65/66/67/68/69/70/71/72/73/74/75/76/77/78/79/80/81/82/83/84/85/86/87/88/89/90/91/92/93/94/95/96/97/98/99/100/101/102/103/104/105/106/107/108/109/110/111/112/113/114/115/116/117/118/119/120/121/122/123/124/125/126/127/128/129/130/131/132/133/134/135/136/137,
+    PARAM      = 203.128,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.ml4.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 924 fields
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = GG,
+    LEVTYPE    = SFC,
+    PARAM      = 151/165/166/186/187/188/159/031/172/034,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.sfc.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 120 fields
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 58973
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod2:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod3:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod2', local port is 34195
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod3', local port is 47386
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 47386
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 34195
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = SH,
+    LEVTYPE    = ML,
+    LEVELIST   = 61/62/63/64/65/66/67/68/69/70/71/72/73/74/75/76/77/78/79/80/81/82/83/84/85/86/87/88/89/90/91/92/93/94/95/96/97/98/99/100/101/102/103/104/105/106/107/108/109/110/111/112/113/114/115/116/117/118/119/120/121/122/123/124/125/126/127/128/129/130/131/132/133/134/135/136/137,
+    PARAM      = 131,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.ml_u.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 924 fields
+    retrieve,
+    time=00:00:00,
+    date=2022-05-12,
+    step=39/to/72/by/3,
+    area=50.0/-90.0/20.0/-40.0,
+    grid=0.15/0.15,
+    truncation=none,
+    resol=av,
+    class=od,
+    levelist=61/to/137,
+    levtype=ml,
+    param=D,
+    stream=oper,
+    type=fc,
+    target="grib/ecmwf_forecast.US_LL015.20220512T00.072.ml5.grib"
+
+mars - INFO   - 20220512.141334 - Processing request 1
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod2:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 34195
+mars - INFO   - 20220512.141334 - Mars server is on ccappn002.ecmwf.int (10.144.0.34) 38719
+mars - INFO   - 20220512.141334 - Server task is 267 [FDB5 prod]
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod2', local port is 56021
+mars - INFO   - 20220512.141334 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 56021
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = SH,
+    LEVTYPE    = ML,
+    LEVELIST   = 61/62/63/64/65/66/67/68/69/70/71/72/73/74/75/76/77/78/79/80/81/82/83/84/85/86/87/88/89/90/91/92/93/94/95/96/97/98/99/100/101/102/103/104/105/106/107/108/109/110/111/112/113/114/115/116/117/118/119/120/121/122/123/124/125/126/127/128/129/130/131/132/133/134/135/136/137,
+    PARAM      = 248,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.ml2.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 924 fields
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod2:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod2', local port is 45648
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 45648
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = SH,
+    LEVTYPE    = ML,
+    LEVELIST   = 61/62/63/64/65/66/67/68/69/70/71/72/73/74/75/76/77/78/79/80/81/82/83/84/85/86/87/88/89/90/91/92/93/94/95/96/97/98/99/100/101/102/103/104/105/106/107/108/109/110/111/112/113/114/115/116/117/118/119/120/121/122/123/124/125/126/127/128/129/130/131/132/133/134/135/136/137,
+    PARAM      = 132,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.ml_v.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 924 fields
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod3:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod3', local port is 47421
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 47421
+
+RETRIEVE,
+    CLASS      = OD,
+    TYPE       = FC,
+    STREAM     = OPER,
+    EXPVER     = 0001,
+    REPRES     = SH,
+    LEVTYPE    = ML,
+    LEVELIST   = 61/62/63/64/65/66/67/68/69/70/71/72/73/74/75/76/77/78/79/80/81/82/83/84/85/86/87/88/89/90/91/92/93/94/95/96/97/98/99/100/101/102/103/104/105/106/107/108/109/110/111/112/113/114/115/116/117/118/119/120/121/122/123/124/125/126/127/128/129/130/131/132/133/134/135/136/137,
+    PARAM      = 155,
+    DATE       = 20220512,
+    TIME       = 0000,
+    STEP       = 39/42/45/48/51/54/57/60/63/66/69/72,
+    DOMAIN     = G,
+    TARGET     = "grib/ecmwf_forecast.US_LL015.20220512T00.072.ml5.grib",
+    RESOL      = AV,
+    AREA       = 50.0/-90.0/20.0/-40.0,
+    GRID       = 0.15/0.15,
+    TRUNCATION = NONE
+
+mars - INFO   - 20220512.141334 - Requesting 924 fields
+mars - WARN   - 20220512.141334 - dhsbase.random_hosts is obsolete, give a list of hosts in dhsbase.host instead
+mars - INFO   - 20220512.141334 - dhsbase selecting random server fdb-server-prod3:9000
+mars - INFO   - 20220512.141334 - Setting SO_SNDBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 8192 (8.00 K)
+mars - WARN   - 20220512.141334 - SO_SNDBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Setting SO_RCVBUF to 33554432 (32.00 M)
+mars - INFO   - 20220512.141334 - Current value is 43690 (42.67 K)
+mars - WARN   - 20220512.141334 - SO_RCVBUF limited by kernel to 124928 (122.00 K)
+mars - INFO   - 20220512.141334 - Calling mars on 'fdb-server-prod3', local port is 45048
+mars - INFO   - 20220512.141334 - Callback at address 136.156.166.113, port 45048
+mars - INFO   - 20220512.141334 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 35172
+mars - INFO   - 20220512.141334 - Mars server is on ccappn003.ecmwf.int (10.144.0.35) 42979
+mars - INFO   - 20220512.141334 - Server task is 158 [FDB5 prod]
+mars - INFO   - 20220512.141334 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141334 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 44522
+mars - INFO   - 20220512.141334 - Mars server is on ccappn001.ecmwf.int (10.144.0.33) 34061
+mars - INFO   - 20220512.141334 - Server task is 866 [FDB5 prod]
+mars - INFO   - 20220512.141334 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141334 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 43211
+mars - INFO   - 20220512.141334 - Mars server is on ccappn001.ecmwf.int (10.144.0.33) 54622
+mars - INFO   - 20220512.141334 - Server task is 667 [FDB5 prod]
+mars - INFO   - 20220512.141334 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141334 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 56021
+mars - INFO   - 20220512.141334 - Mars server is on ccappn002.ecmwf.int (10.144.0.34) 34218
+mars - INFO   - 20220512.141334 - Server task is 249 [FDB5 prod]
+mars - INFO   - 20220512.141334 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141334 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 39777
+mars - INFO   - 20220512.141334 - Mars server is on ccappn001.ecmwf.int (10.144.0.33) 38006
+mars - INFO   - 20220512.141334 - Server task is 52 [FDB5 prod]
+mars - INFO   - 20220512.141334 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141334 - Looking up FDB indexes: 0.188627 second elapsed, 0.06 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141334 - Transfering 78757296 bytes
+mars - INFO   - 20220512.141335 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 45648
+mars - INFO   - 20220512.141335 - Mars server is on ccappn002.ecmwf.int (10.144.0.34) 56234
+mars - INFO   - 20220512.141335 - Server task is 216 [FDB5 prod]
+mars - INFO   - 20220512.141335 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141335 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 58973
+mars - INFO   - 20220512.141335 - Mars server is on ccappn003.ecmwf.int (10.144.0.35) 37370
+mars - INFO   - 20220512.141335 - Server task is 269 [FDB5 prod]
+mars - INFO   - 20220512.141335 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141335 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 47386
+mars - INFO   - 20220512.141335 - Mars server is on ccappn003.ecmwf.int (10.144.0.35) 44462
+mars - INFO   - 20220512.141335 - Server task is 190 [FDB5 prod]
+mars - INFO   - 20220512.141335 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141335 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 51636
+mars - INFO   - 20220512.141335 - Mars server is on ccappn003.ecmwf.int (10.144.0.35) 42147
+mars - INFO   - 20220512.141335 - Server task is 68 [FDB5 prod]
+mars - INFO   - 20220512.141335 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 47421
+mars - INFO   - 20220512.141335 - Mars server is on ccappn003.ecmwf.int (10.144.0.35) 52557
+mars - INFO   - 20220512.141335 - Server task is 327 [FDB5 prod]
+mars - INFO   - 20220512.141335 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141335 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141335 - ShToGridded: loading Legendre coefficients '/tmp/cache/mir/legendre/4/local-T1279-GaussianN1280-OPT4189816c2e.leg'
+mars - INFO   - 20220512.141336 - Looking up FDB indexes: 1 second elapsed, 1 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141336 - Transfering 12202140720 bytes
+mars - INFO   - 20220512.141336 - Looking up FDB indexes: 1 second elapsed, 1 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141336 - Transfering 751914552 bytes
+mars - INFO   - 20220512.141336 - Looking up FDB indexes: 0.984611 second elapsed, 0.1 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141336 - Transfering 1584550560 bytes
+mars - INFO   - 20220512.141336 - Looking up FDB indexes: 1 second elapsed, 0.64 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141336 - Transfering 6104036400 bytes
+mars - INFO   - 20220512.141336 - Looking up FDB indexes: 1 second elapsed, 0.29 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141336 - Transfering 21751210080 bytes
+mars - INFO   - 20220512.141336 - Looking up FDB indexes: 1 second elapsed, 0.25 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141336 - Transfering 3032155896 bytes
+mars - INFO   - 20220512.141336 - ShToGridded: loading Legendre coefficients '/tmp/cache/mir/legendre/4/local-T1279-GaussianN1280-OPT4189816c2e.leg'
+mars - INFO   - 20220512.141337 - Looking up FDB indexes: 2 seconds elapsed, 1 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141337 - Looking up FDB indexes: 1 second elapsed, 0.37 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141337 - Transfering 15234296616 bytes
+mars - INFO   - 20220512.141337 - Looking up FDB indexes: 2 seconds elapsed, 1 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141337 - Transfering 6064311792 bytes
+mars - INFO   - 20220512.141337 - Transfering 6064311792 bytes
+mars - INFO   - 20220512.141337 - Looking up FDB indexes: 2 seconds elapsed, 1 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141337 - Transfering 5377512384 bytes
+mars - INFO   - 20220512.141337 - ShToGridded: loading Legendre coefficients '/tmp/cache/mir/legendre/4/local-T1279-GaussianN1280-OPT4189816c2e.leg'
+mars - INFO   - 20220512.141337 - ShToGridded: loading Legendre coefficients '/tmp/cache/mir/legendre/4/local-T1279-GaussianN1280-OPT4189816c2e.leg'
+mars - INFO   - 20220512.141338 - Deriving U and V from vorticity and divergence
+mars - INFO   - 20220512.141338 - Deriving U and V from vorticity and divergence
+mars - INFO   - 20220512.141338 - ShToGridded: loading Legendre coefficients '/tmp/cache/mir/legendre/4/local-T1279-GaussianN1280-OPT4189816c2e.leg'
+mars - INFO   - 20220512.141338 - ShToGridded: loading Legendre coefficients '/tmp/cache/mir/legendre/4/local-T1279-GaussianN1280-OPT4189816c2e.leg'
+mars - INFO   - 20220512.141338 - ShToGridded: loading Legendre coefficients '/tmp/cache/mir/legendre/4/local-T1279-GaussianN1280-OPT4189816c2e.leg'
+mars - INFO   - 20220512.141345 - Deriving U and V from vorticity and divergence
+mars - INFO   - 20220512.141354 - Mars client is on ecgb13.ecmwf.int (136.156.166.113) 45048
+mars - INFO   - 20220512.141354 - Mars server is on ccappn003.ecmwf.int (10.144.0.35) 57873
+mars - INFO   - 20220512.141354 - Server task is 190 [FDB5 prod]
+mars - INFO   - 20220512.141354 - Retrieving from FDB [FDB5 prod]
+mars - INFO   - 20220512.141354 - 120 fields retrieved from 'FDB5 prod'
+mars - INFO   - 20220512.141354 - 120 fields have been interpolated on 'ecgb13'
+mars - INFO   - 20220512.141354 - Request time:  wall: 20 sec  cpu: 13 sec 
+mars - INFO   - 20220512.141354 -   Read from network: 1.48 Gbyte(s) in 9 sec  [162.24 Mbyte/sec] 
+mars - INFO   - 20220512.141354 -   Processing in FDB5 prod: wall: 2 sec 
+mars - INFO   - 20220512.141354 -   Visiting FDB5 prod: wall: 20 sec 
+mars - INFO   - 20220512.141354 -   Post-processing: wall: 9 sec cpu: 9 sec 
+mars - INFO   - 20220512.141354 -   Writing to target file: 15.38 Mbyte(s) in < 1 sec [808.33 Mbyte/sec] 
+mars - INFO   - 20220512.141354 - Memory used: 111.84 Mbyte(s)
+mars - INFO   - 20220512.141354 - No errors reported
+converting sfc
+mars - INFO   - 20220512.141354 - Looking up FDB indexes: 0.196034 second elapsed, 0.19 second cpu [FDB5 prod]
+mars - INFO   - 20220512.141354 - Transfering 3032155896 bytes
+cdo    copy: Processed 8056080 values from 10 variables over 12 timesteps [0.28s 48MB].
+mars - INFO   - 20220512.141355 - ShToGridded: loading Legendre coefficients '/tmp/cache/mir/legendre/4/local-T1279-GaussianN1280-OPT4189816c2e.leg'
+		"ERROR: unreadable message"
+cdo    copy: Processed 402804 values from 1 variable over 6 timesteps [0.32s 55MB].
+cdo    setgrid: Processed 402804 values from 1 variable over 6 timesteps [0.08s 19MB].
+cdo    merge (Warning): Input stream 2 has 6 timesteps. Stream 1 has more timesteps, skipped!
+cdo    merge: Processed 4430844 values from 11 variables over 13 timesteps [0.14s 51MB].
+copy sfc.nc
+Transfering sfc files to pa_mss_ecmwf_ddp_southtrac
+158370623
+mars - INFO   - 20220512.141412 - 24 fields retrieved from 'FDB5 prod'
+mars - INFO   - 20220512.141412 - 24 fields have been interpolated on 'ecgb13'
+mars - INFO   - 20220512.141412 - Request time:  wall: 39 sec  cpu: 37 sec 
+mars - INFO   - 20220512.141412 -   Read from network: 75.11 Mbyte(s) in < 1 sec [99.29 Mbyte/sec] 
+mars - INFO   - 20220512.141412 -   Visiting FDB5 prod: wall: 39 sec 
+mars - INFO   - 20220512.141412 -   Post-processing: wall: 37 sec cpu: 37 sec 
+mars - INFO   - 20220512.141412 -   Writing to target file: 3.10 Mbyte(s) in < 1 sec [484.87 Mbyte/sec] 
+mars - INFO   - 20220512.141412 - Memory used: 2.72 Gbyte(s)
+mars - INFO   - 20220512.141412 - No errors reported
+mars - INFO   - 20220512.141441 - 84 fields retrieved from 'FDB5 prod'
+mars - INFO   - 20220512.141441 - 84 fields have been interpolated on 'ecgb13'
+mars - INFO   - 20220512.141441 - Request time:  wall: 1 min 7 sec  cpu: 1 min 3 sec 
+mars - INFO   - 20220512.141441 -   Read from network: 717.08 Mbyte(s) in 4 sec  [198.82 Mbyte/sec] 
+mars - INFO   - 20220512.141441 -   Processing in FDB5 prod: wall: 2 sec 
+mars - INFO   - 20220512.141441 -   Visiting FDB5 prod: wall: 1 min 7 sec 
+mars - INFO   - 20220512.141441 -   Post-processing: wall: 1 min 1 sec cpu: 1 min 
+mars - INFO   - 20220512.141441 -   Writing to target file: 10.77 Mbyte(s) in < 1 sec [680.83 Mbyte/sec] 
+mars - INFO   - 20220512.141441 - Memory used: 2.75 Gbyte(s)
+mars - INFO   - 20220512.141441 - No errors reported
+converting pv
+cdo    copy: Processed 5639256 values from 7 variables over 12 timesteps [0.11s 38MB].
+Transfering pv files to pa_mss_ecmwf_ddp_southtrac
+158370626
+mars - INFO   - 20220512.141502 - 924 fields retrieved from 'FDB5 prod'
+mars - INFO   - 20220512.141502 - 924 fields have been interpolated on 'ecgb13'
+mars - INFO   - 20220512.141502 - Request time:  wall: 1 min 28 sec  cpu: 1 min 14 sec 
+mars - INFO   - 20220512.141502 -   Read from network: 5.68 Gbyte(s) in 22 sec  [268.82 Mbyte/sec] 
+mars - INFO   - 20220512.141502 -   Processing in FDB5 prod: wall: 2 sec 
+mars - INFO   - 20220512.141502 -   Visiting FDB5 prod: wall: 1 min 28 sec 
+mars - INFO   - 20220512.141502 -   Post-processing: wall: 1 min cpu: 59 sec 
+mars - INFO   - 20220512.141502 -   Writing to target file: 58.97 Mbyte(s) in < 1 sec [694.67 Mbyte/sec] 
+mars - INFO   - 20220512.141502 - Memory used: 122.18 Mbyte(s)
+mars - INFO   - 20220512.141502 - No errors reported
+mars - INFO   - 20220512.141526 - 924 fields retrieved from 'FDB5 prod'
+mars - INFO   - 20220512.141526 - 924 fields have been interpolated on 'ecgb13'
+mars - INFO   - 20220512.141526 - Request time:  wall: 1 min 52 sec  cpu: 1 min 35 sec 
+mars - INFO   - 20220512.141526 -   Read from network: 11.36 Gbyte(s) in 47 sec  [248.49 Mbyte/sec] 
+mars - INFO   - 20220512.141526 -   Processing in FDB5 prod: wall: 2 sec 
+mars - INFO   - 20220512.141526 -   Visiting FDB5 prod: wall: 1 min 52 sec 
+mars - INFO   - 20220512.141526 -   Post-processing: wall: 59 sec cpu: 58 sec 
+mars - INFO   - 20220512.141526 -   Writing to target file: 119.49 Mbyte(s) in < 1 sec [773.12 Mbyte/sec] 
+mars - INFO   - 20220512.141526 - Memory used: 128.35 Mbyte(s)
+mars - INFO   - 20220512.141526 - No errors reported
+mars - INFO   - 20220512.141650 - 1848 fields retrieved from 'FDB5 prod'
+mars - INFO   - 20220512.141650 - 1848 fields have been interpolated on 'ecgb13'
+mars - INFO   - 20220512.141650 - Request time:  wall: 3 min 16 sec  cpu: 2 min 47 sec 
+mars - INFO   - 20220512.141650 -   Read from network: 20.26 Gbyte(s) in 1 min 18 sec  [266.87 Mbyte/sec] 
+mars - INFO   - 20220512.141650 -   Processing in FDB5 prod: wall: 2 sec 
+mars - INFO   - 20220512.141650 -   Visiting FDB5 prod: wall: 3 min 16 sec 
+mars - INFO   - 20220512.141650 -   Post-processing: wall: 1 min 49 sec cpu: 1 min 46 sec 
+mars - INFO   - 20220512.141650 -   Writing to target file: 205.94 Mbyte(s) in < 1 sec [813.42 Mbyte/sec] 
+mars - INFO   - 20220512.141650 - Memory used: 128.38 Mbyte(s)
+mars - INFO   - 20220512.141650 - No errors reported
+mars - INFO   - 20220512.142343 - 864 fields retrieved from 'FDB5 prod'
+mars - INFO   - 20220512.142343 - 864 fields have been interpolated on 'ecgb13'
+mars - INFO   - 20220512.142343 - Request time:  wall: 10 min 9 sec  cpu: 9 min 51 sec 
+mars - INFO   - 20220512.142343 -   Read from network: 5.01 Gbyte(s) in 24 sec  [216.40 Mbyte/sec] 
+mars - INFO   - 20220512.142343 -   Processing in FDB5 prod: wall: 3 sec 
+mars - INFO   - 20220512.142343 -   Visiting FDB5 prod: wall: 10 min 9 sec 
+mars - INFO   - 20220512.142343 -   Post-processing: wall: 9 min 38 sec cpu: 9 min 36 sec 
+mars - INFO   - 20220512.142343 -   Writing to target file: 110.74 Mbyte(s) in < 1 sec [890.56 Mbyte/sec] 
+mars - INFO   - 20220512.142343 - Memory used: 2.83 Gbyte(s)
+mars - INFO   - 20220512.142343 - No errors reported
+converting pl from mars
+cdo    copy: Processed 58003776 values from 9 variables over 12 timesteps [1.68s 15MB].
+copy pl.nc (from mars)
+Transfering pl files to pa_mss_ecmwf_ddp_southtrac
+158370676
