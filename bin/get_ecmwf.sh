@@ -93,7 +93,9 @@ export time_units="hours since ${init_date}"
 
 if ecaccess-association-list | grep -q $ECTRANS_ID; then
   echo "Transfering files to "$ECTRANS_ID 
-  ectrans -remote $ECTRANS_ID -source $mlfile -target $mlfile -overwrite -remove 
+  if [ x$TRANSFER_MODEL_LEVELS == x"yes" ]; then
+      ectrans -remote $ECTRANS_ID -source $mlfile -target $mlfile -overwrite -remove 
+  fi
   if [ -f $tlfile ]; then
       ectrans -remote $ECTRANS_ID -source $tlfile -target $tlfile -overwrite -remove 
   fi

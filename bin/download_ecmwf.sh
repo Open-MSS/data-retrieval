@@ -18,7 +18,7 @@ if [ ! -f grib/${BASE}.ml.grib ]; then
     levtype=ml,
     param=$MODEL_PARAMETERS,
     stream=oper,
-    type=fc,
+    type=$ECMWF_TYPE,
     target="grib/${BASE}.ml.grib"
 EOF
 fi
@@ -37,44 +37,48 @@ if [ ! -f grib/${BASE}.ml2.grib ]; then
     levtype=ml,
     param=$MODEL2_PARAMETERS,
     stream=oper,
-    type=fc,
+    type=$ECMWF_TYPE,
     target="grib/${BASE}.ml2.grib"
 EOF
 fi
 if [ ! -f grib/${BASE}.sfc.grib ]; then
-    mars <<EOF
-    retrieve,
-    time=$TIME,
-    date=$DATE,
-    step=$STEP,
-    area=$AREA,
-    grid=$GRID,
-    truncation=$TRUNCATION,
-    resol=$RESOL,
-    class=od,
-    levtype=sfc,
-    param=$SFC_PARAMETERS,
-    stream=oper,
-    type=fc,
-    target="grib/${BASE}.sfc.grib"
+    if [[ x$SFC_PARAMETERS != x"" ]]; then
+        mars <<EOF
+        retrieve,
+        time=$TIME,
+        date=$DATE,
+        step=$STEP,
+        area=$AREA,
+        grid=$GRID,
+        truncation=$TRUNCATION,
+        resol=$RESOL,
+        class=od,
+        levtype=sfc,
+        param=$SFC_PARAMETERS,
+        stream=oper,
+        type=fc,
+        target="grib/${BASE}.sfc.grib"
 EOF
+    fi
 fi
 if [ ! -f grib/${BASE}.pv.grib ]; then
-    mars <<EOF
-    retrieve,
-    time=$TIME,
-    date=$DATE,
-    step=$STEP,
-    area=$AREA,
-    grid=$GRID,
-    truncation=$TRUNCATION,
-    resol=$RESOL,
-    class=od,
-    levelist=$PV_LEVELS,
-    levtype=pv,
-    param=$PV_PARAMETERS,
-    stream=oper,
-    type=fc,
-    target="grib/${BASE}.pv.grib"
+    if [[ x$PV_LEVELS != x"" ]]; then
+        mars <<EOF
+        retrieve,
+        time=$TIME,
+        date=$DATE,
+        step=$STEP,
+        area=$AREA,
+        grid=$GRID,
+        truncation=$TRUNCATION,
+        resol=$RESOL,
+        class=od,
+        levelist=$PV_LEVELS,
+        levtype=pv,
+        param=$PV_PARAMETERS,
+        stream=oper,
+        type=fc,
+        target="grib/${BASE}.pv.grib"
 EOF
+    fi
 fi

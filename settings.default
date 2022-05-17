@@ -8,6 +8,9 @@ export DATASET=ecmwf
 
 export TRUNCATION=auto # options: none, auto, TXXX (e.g. T21)
 export RESOL=auto      # options: av (archived), auto, TXXX(e.g. T21); truncation shall replace resol but resol is still needed
+export ECMWF_TYPE=fc   
+export CDS_TYPE=an
+export TRANSFER_MODEL_LEVELS=yes
 
 # definition of parameters and levels to read
 export ANCILLARY="--pv --theta --tropopause --n2 --pressure"
