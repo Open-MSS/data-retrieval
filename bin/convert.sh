@@ -59,8 +59,13 @@ ncatted -O -a standard_name,lev,o,c,atmosphere_hybrid_sigma_pressure_coordinate 
 
 #copy files
 if ecaccess-association-list | grep -q $ECTRANS_ID; then
+  echo "Compress ml file before transfering"
+  date
+  nccopy -u -d5 $tmpfile ${tmpfile}c
+  date
   echo "Transfering ml (without u/v and ancillary) files to "$ECTRANS_ID 
-  ectrans -remote $ECTRANS_ID -source $tmpfile -target $mlfile -overwrite -remove 
+  ectrans -remote $ECTRANS_ID -source ${tmpfile}c -target $mlfile -overwrite -remove
+  rm ${tmpfile}c 
 fi
 
 echo "merge ml file and uv file for later calculations"
@@ -107,5 +112,9 @@ mv ${mlfile_uv}ancillary ${mlfile_uv}
 echo "fix up ml u,v,ancillary file"
 ncks -O -7 -C -x -v hyai,hyam,hybi,hybm $MODEL_REDUCTION $mlfile_uv $mlfile_uv
 ncatted -O -a standard_name,lev,o,c,atmosphere_hybrid_sigma_pressure_coordinate $mlfile_uv
-
+echo "Compress ml u,v,ancillary"
+date
+nccopy -u -d5 $mlfile_uv ${mlfile_uv}c
+mv ${mlfile_uv}c $mlfile_uv
+date
 echo "Done, your netcdf files are located at $(pwd)/mss"
