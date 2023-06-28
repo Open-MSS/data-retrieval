@@ -1,7 +1,7 @@
 # Do not leave any whitespaces
 # variable=value
 
-module load cdo
+module load cdo/new
 module load nco
 
 PREF=${CONDA_PREFIX##*/}
