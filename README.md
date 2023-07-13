@@ -76,9 +76,11 @@ Scripts Setup
        git clone https://github.com/Open-MSS/data-retrieval.git
        cd data-retrieval
 
+[SG: not sure if this is needed for this version of the data retrieval (branch speedup_with_parallel_mars_requests)
 2. Install all requirements
 
        pip3 install --user -r requirements.txt
+]
 
 3. Copy the settings.example to settings.config and adjust the configuration
    to your liking; here, you may also overwrite the values set already in 
