@@ -214,12 +214,13 @@ def compute_z_level(idx, lev, values, z_h):
     codes_index_select(idx, 'shortName', 'q')
     gid = codes_new_from_index(idx)
     if gid is None:
-        raise MissingLevelError('Q at level {} missing from input'.format(lev))
-    q_level = codes_get_values(gid)
-    codes_release(gid)
+        print('Q at level {} missing from input'.format(lev))
+    else:
+        q_level = codes_get_values(gid)
+        codes_release(gid)
 
-    # compute moist temperature
-    t_level = t_level * (1. + 0.609133 * q_level)
+        # compute moist temperature
+        t_level = t_level * (1. + 0.609133 * q_level)
 
     # compute the pressures (on half-levels)
     ph_lev, ph_levplusone = get_ph_levs(values, lev)
