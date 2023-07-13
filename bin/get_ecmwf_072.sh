@@ -3,11 +3,11 @@
 #Copyright (C) 2021 by Forschungszentrum Juelich GmbH
 #Author(s): Joern Ungermann, May Baer, Jens-Uwe Grooss
 
-#SBATCH --qos=normal
+#SBATCH --qos=et
 #SBATCH --job-name=get_ecmwf
-#SBATCH --output=get_ecmwf.%j.out
-#SBATCH --error=get_ecmwf.%j.out
-#SBATCH --workdir=/home/ms/spdescan/ddp/mss_wms/data_retrieval_for_ipa_mss_wms_comet2/data-retrieval/batch_out/
+#SBATCH --output=/ec/res4/scratch/ddp/mss_wms/files_for_mss/batch_out/get_ecmwf.%j.out
+#SBATCH --error=/ec/res4/scratch/ddp/mss_wms/files_for_mss/batch_out/get_ecmwf.%j.out
+#SBATCH --chdir=/ec/res4/scratch/ddp/mss_wms/files_for_mss/batch_out/
 
 
 # This script works with the cdo version installed on ECACCESS and 
@@ -22,7 +22,7 @@ export PS4='+[$(((`date +%s%N`-$N)/1000000))ms][${BASH_SOURCE}:${LINENO}]: ${FUN
 # enable line below for debugging and performance timing
 # set -x
 
-export MAINDIR=$HOME/mss_wms/data_retrieval_for_ipa_mss_wms_comet2/data-retrieval/
+export MAINDIR=$HOME/mss_wms/data_retrieval_for_ipa_mss_wms_atos/data-retrieval/
 export BINDIR=$MAINDIR/bin
 
 . ${MAINDIR}/settings.default
@@ -161,6 +161,12 @@ if ecaccess-association-list | grep -q $ECTRANS_ID; then
   if [ -f $alfile ]; then
       ectrans -remote $ECTRANS_ID -source $alfile -target $alfile -overwrite -remove 
   fi
+fi
+#---------------------comet meteograms----------------
+if [[ x$COMET_MET == x"yes" ]]
+then
+  echo "Run extract_comet_ncks.sh"
+  . $MAINDIR/extract_comet_ncks.sh
 fi
 
 if [[ x$CLEANUP == x"yes" ]]
