@@ -24,6 +24,7 @@ jobs:
         
     - name: Install dependencies
       run: |
+        sudo apt update \
         sudo apt install nco cdo libeccodes-tools \
         && python -m pip install --upgrade pip cdsapi cfgrib eccodes MetPy tqdm xarray numpy netCDF4 pytest
 
