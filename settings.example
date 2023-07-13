@@ -1,24 +1,26 @@
+module load netcdf4 
+module load cdo
+module load nco
+module load python3/old
+module load ecaccess
+module load ecmwf-toolbox
+module load cdo/new
+#PREF=${CONDA_PREFIX##*/}
+#if [[ $PREF != mambaforge && $PREF != ncenv ]]
+#then
+#    PATH=$HOME/mambaforge/bin/:$PATH
+#fi
+#. $HOME/mambaforge/etc/profile.d/conda.sh
+#conda activate ncenv
+
 # Do not leave any whitespaces
 # variable=value
 
-module load cdo/new
-module load nco
-
-PREF=${CONDA_PREFIX##*/}
-if [[ $PREF != mambaforge && $PREF != ncenv ]]
-then
-    PATH=$HOME/mambaforge/bin/:$PATH
-fi
-. $HOME/mambaforge/etc/profile.d/conda.sh
-conda activate ncenv
-
-# write data to the $SCRATCH directory with more available disk quota
-export WORKDIR=$SCRATCH
-
 export PYTHON=python3
-export CLEANUP=no
 #export MODEL_REDUCTION="-d lev,0,0 -d lev,16,28,4 -d lev,32,124,2"
 export MODEL_REDUCTION=
+export CLEANUP=yes
+#export CLEANUP=no
 
 # definition of parameters and levels to read
 export MODEL_LEVELS=61/to/137
@@ -33,12 +35,21 @@ export THETA_LEVELS=
 export MODEL_PARAMETERS1=W
 export MODEL_PARAMETERS2=CC
 export MODEL_PARAMETERS3=CLWC/CIWC
-export MODEL_PARAMETERS4=O3
-export MODEL_PARAMETERS5=D
+#export MODEL_PARAMETERS4=O3
+#export MODEL_PARAMETERS5=D
 
+#export SFC_PARAMETERS=151.128/165.128/166.128/186.128/187.128/188.128
+#export SFC_PARAMETERS=MSL/10U/10V/LCC/MCC/HCC/Z/SP
 export SFC_PARAMETERS=MSL/10U/10V/LCC/MCC/HCC/BLH/CI/LSM/SSTK
+#param_sfc=Z/LSM/LCC/MCC/HCC/MSL/SP/SSTK/TCC/TCW/TCWV/10U/10V/2D/2T/SKT/ASN/CI/BLH/LSP/CP/TP/CAPE/E/SD/SF/SSHF/EWSS/NSSS/IEWS/INSS/ISHF
+
+#export PV_PARAMETERS=3/54/129/131/132/133/203
 export PV_PARAMETERS=Z/PRES/PT/U/V/Q/O3
+#export THETA_PARAMETERS=54/60/131/132/133/155/203
 export THETA_PARAMETERS=PRESS/PV/U/V/Q/D/O3
+
+#export PRES_LEVELS=850/500/400/300/200/150/120/100/80/65/50/40/30/20/10/5/1
+#export GPH_LEVELS=0/250/500/750/1000/1250/1500/1750/2000/2250/2500/2750/3000/3250/3500/3750/4000/4250/4500/4750/5000/5250/5500/5750/6000/6250/6500/6750/7000/7250/7500/7750/8000/8250/8500/8750/9000/9250/9500/9750/10000/10250/10500/10750/11000/11250/11500/11750/12000/12250/12500/12750/13000/13250/13500/13750/14000/14250/14500/14750/15000/15250/15500/15750/16000/16250/16500/16750/17000/17250/17500/17750/18000/18250/18500/18750/19000/19250/19500/19750/20000/20500/21000/21500/22000/22500/23000/23500/24000/24500/25000/25500/26000/26500/27000/27500/28000/28500/29000/29500/30000/30500/31000/31500/32000/32500/33000/33500/34000/34500/35000/35500/36000/36500/37000/37500/38000/38500/39000/39500/40000/41000/42000/43000/44000/45000/46000/47000/48000/49000/50000/51000/52000/53000/54000/55000/56000/57000/58000/59000/60000
 
 export PRES_FROM_MARS=yes
 export PRES_PARAMETERS=U/V/W/T/D/Q/Z/O3/PV
@@ -47,36 +58,40 @@ export GPH_LEVELS=
 #export GPH_LEVELS=0/250/500/750/1000/1250/1500/1750/2000/2250/2500/2750/3000/3250/3500/3750/4000/4250/4500/4750/5000/5250/5500/5750/6000/6250/6500/6750/7000/7250/7500/7750/8000/8250/8500/8750/9000/9250/9500/9750/10000/10250/10500/10750/11000/11250/11500/11750/12000/12250/12500/12750/13000/13250/13500/13750/14000/14250/14500/14750/15000
 
 #additional parameters (for add_ancillery.sh)
-export ANCILLARY="--pv --pressure --theta"
 #export ANCILLARY="--pv --theta --tropopause --n2 --pressure"
+export ANCILLARY="--pv --pressure --theta"
 
 #data transfer and mars request settings
 export ECTRANS_ID=
-
-# configure area, grid
+export AREA=60.0/-140.0/30.0/-100.0 # sub-area of data to be extracted: N/W/S/E
 #1 deg grid resolution
-#export DATASET=ecmwf_forecast.US_LL100
-#export AREA=50.0/-90.0/20.0/-40.0 # sub-area of data to be extracted: N/W/S/E
+#export FILENAME=ecmwf_forecasts.US_LL100
 #export GRID=1.0/1.0
-#export TRUNCATION=auto #options: none, auto, TXXX (e.g. T21)
-#export RESOL=auto        #otpions: av (archived), auto, TXXX(e.g. T21); truncation shall replace resol but resol is still needed
-#0.15 deg grid resolution
+#export TRUNCATION=none #options: none, auto, TXXX (e.g. T21)
+#export RESOL=av        #otpions: av (archived), auto, TXXX(e.g. T21); truncation shall replace resol but resol is still needed
+#0.15 deg grid resolution: uses too much memory in PV calc if area is too lage (gets killed)
 export DATASET=ecmwf_forecast.US_LL015
 export GRID=0.15/0.15
-export TRUNCATION=none #options: none, auto, TXXX (e.g. T21)
-export RESOL=av        #otpions: av (archived), auto, TXXX(e.g. T21); truncation shall replace resol but resol is still needed
+#0.25 deg grid resolution
+#export DATASET=ecmwf_forecast.EUR_LL025
+#export GRID=0.25/0.25
+export TRUNCATION=auto #options: none, auto, TXXX (e.g. T21)
+export RESOL=auto        #otpions: av (archived), auto, TXXX(e.g. T21); truncation shall replace resol but resol is still needed
+
+# write data to the $SCRATCH directory with more available disk quota
+export WORKDIR=$SCRATCH/mss_wms/files_for_mss/
+# for operational use one can use $SCRATCHDIR which is automatically deleted after job has finished 
+#export WORKDIR=$SCRATCHDIR
 
 # set init and forecast times for testing
 # (default 36h from today 00:00) 
 # May be overwritten by ECMWF queueing system
 export DAY=`date +%d`
+#export DAY="27"
 export MONTH=`date +%m`
 export YEAR=`date +%Y`
 export HH=00
 export FCSTEP=036
-export STEP=0/to/36/by/6
-#export FCSTEP=072
-#export STEP=39/to/72/by/3
-#export FCSTEP=144
-#export STEP=78/to/144/by/6
+export STEP=0/to/36/by/3
+
 
