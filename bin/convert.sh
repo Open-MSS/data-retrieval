@@ -37,18 +37,30 @@ ncatted -O \
 rm ${tmpfile}
 
 #merge ml-grib files and convert with cdo to netcdf (sorting ascending for time step requried in grib_copy otherwise cdo does not recognise correct times for additional vars)
-echo "merge ml-grib files (file not found will show up if additional parameters are not retrieved)"
-grib_copy -B'step:i asc' grib/${BASE}.ml_tq.grib grib/${BASE}.ml1.grib grib/${BASE}.ml2.grib grib/${BASE}.ml3.grib grib/${BASE}.ml4.grib grib/${BASE}.ml5.grib grib/${BASE}.ml.grib
+echo "merge ml-grib files (check this section if you miss additonal parameters in ml files)"
+if [[ -f grib/${BASE}.ml1.grib && -f grib/${BASE}.ml2.grib && -f grib/${BASE}.ml3.grib && -f grib/${BASE}.ml4.grib && -f grib/${BASE}.ml5.grib ]]; then
+   grib_copy -B'step:i asc' grib/${BASE}.ml_tq.grib grib/${BASE}.ml1.grib grib/${BASE}.ml2.grib grib/${BASE}.ml3.grib grib/${BASE}.ml4.grib grib/${BASE}.ml5.grib grib/${BASE}.ml.grib
+elif [[ -f grib/${BASE}.ml1.grib && -f grib/${BASE}.ml2.grib && -f grib/${BASE}.ml3.grib && -f grib/${BASE}.ml4.grib ]]; then
+   grib_copy -B'step:i asc' grib/${BASE}.ml_tq.grib grib/${BASE}.ml1.grib grib/${BASE}.ml2.grib grib/${BASE}.ml3.grib grib/${BASE}.ml4.grib grib/${BASE}.ml.grib
+elif [[ -f grib/${BASE}.ml1.grib && -f grib/${BASE}.ml2.grib && -f grib/${BASE}.ml3.grib ]]; then
+   grib_copy -B'step:i asc' grib/${BASE}.ml_tq.grib grib/${BASE}.ml1.grib grib/${BASE}.ml2.grib grib/${BASE}.ml3.grib grib/${BASE}.ml.grib
+else
+   grib_copy -B'step:i asc' grib/${BASE}.ml_tq.grib grib/${BASE}.ml.grib
+fi
 echo copy ml
 cdo -f nc4c -t ecmwf copy grib/${BASE}.ml.grib $mlfile
 ncatted -O \
     -a standard_name,cc,o,c,cloud_area_fraction_in_atmosphere_layer \
-    -a standard_name,o3,o,c,mass_fraction_of_ozone_in_air \
     -a standard_name,ciwc,o,c,specific_cloud_ice_water_content \
     -a standard_name,clwc,o,c,specific_cloud_liquid_water_content \
     -a units,cc,o,c,dimensionless \
     -a units,time,o,c,"${time_units}" \
     $mlfile
+if [[ x$MODEL_PARAMETERS4 == x"O3" ]]; then 
+  ncatted -O \
+      -a standard_name,o3,o,c,mass_fraction_of_ozone_in_air \
+      $mlfile
+fi
 echo "merge ml-file and geopot. height"
 cdo merge ${mlfile} ${tmpfile}_z ${tmpfile}
 mv ${tmpfile} $mlfile 
