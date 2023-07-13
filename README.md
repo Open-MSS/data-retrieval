@@ -101,8 +101,17 @@ After completing both setups, you can use this script as follows:
   that are then automatically stored in the environment variables MSJ* will be used instead
   With the trigger, the job ist started when a specific forecast is available,
   e.g. fc00h036 for the 36h forecast. It can be started either form the ecaccess website
-  or by typing
-  ecaccess-job-submit -ni fc00h036 bin/get_ecmwf.sh (automatic daily job renewal)
-  or
-  ecaccess-job-submit -ni fc00h036  -noRenew bin/get_ecmwf.sh (job runs once)
+  or by a script containing
+
+#! /bin/ksh
+
+ecaccess-job-submit -queueName ecs data-retrieval/bin/get_ecmwf_036.sh -ni fc00h036 -lt 1
+ecaccess-job-submit -queueName ecs data-retrieval/bin/get_ecmwf_036.sh -ni fc12h036 -lt 1
+
+ecaccess-job-submit -queueName ecs data-retrieval/bin/get_ecmwf_072.sh -ni fc00h072 -lt 1
+ecaccess-job-submit -queueName ecs data-retrieval/bin/get_ecmwf_072.sh -ni fc12h072 -lt 1
+
+ecaccess-job-submit -queueName ecs data-retrieval/bin/get_ecmwf_144.sh -ni fc00h144 -lt 1
+ecaccess-job-submit -queueName ecs data-retrieval/bin/get_ecmwf_144.sh -ni fc12h144 -lt 1
+
      
