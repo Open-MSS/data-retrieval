@@ -1,7 +1,6 @@
 module load netcdf4 
-module load cdo
 module load nco
-module load python3/old
+module load python3
 module load ecaccess
 module load ecmwf-toolbox
 module load cdo/new
