@@ -1,4 +1,4 @@
-name: Pytest MSS
+name: Pytest MSS / data-retrieval
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
         shell: bash
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
         
     - name: Install dependencies
       run: |
