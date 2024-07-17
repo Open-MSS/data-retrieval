@@ -26,7 +26,7 @@ jobs:
       run: |
         sudo apt update \
         && sudo apt install nco cdo libeccodes-tools \
-        && python -m pip install --upgrade pip cdsapi cfgrib eccodes MetPy tqdm xarray numpy<2 netCDF4 pytest
+        && python -m pip install --upgrade pip cdsapi cfgrib eccodes MetPy tqdm xarray "numpy<2" netCDF4 pytest
 
     - name: Run tests
       timeout-minutes: 25
