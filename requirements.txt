@@ -5,6 +5,6 @@ python-eccodes
 MetPy
 tqdm
 xarray
-numpy
+numpy <2.0.0
 netCDF4
 pytest
