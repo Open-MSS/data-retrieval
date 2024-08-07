@@ -20,13 +20,13 @@ jobs:
         shell: bash
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
         
     - name: Install dependencies
       run: |
         sudo apt update \
         && sudo apt install nco cdo libeccodes-tools \
-        && python -m pip install --upgrade pip cdsapi cfgrib eccodes MetPy tqdm xarray numpy netCDF4 pytest
+        && python -m pip install --upgrade pip cdsapi cfgrib eccodes MetPy tqdm xarray "numpy<2" netCDF4 pytest
 
     - name: Run tests
       timeout-minutes: 25
