@@ -90,7 +90,7 @@ def parse_args():
             args.levelist = list(range(int(args.levelist[0]),
                                        int(args.levelist[2]) + 1))
     else:
-        args.levelist = [int(l) for l in args.levelist.split('/')]
+        args.levelist = [int(level) for level in args.levelist.split('/')]
     return args
 
 
