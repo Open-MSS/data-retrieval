@@ -1,4 +1,4 @@
-name: Pytest MSS
+name: Pytest MSS / data-retrieval
 
 on:
   push:
