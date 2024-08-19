@@ -1,7 +1,6 @@
 cdsapi
 cfgrib
 eccodes
-python-eccodes
 MetPy
 tqdm
 xarray
