@@ -19,21 +19,21 @@ Setup
 Scripts Setup
 -------------
 
-1. Clone this repository and move into it
+1. Clone this repository and change into it
 
        git clone https://github.com/Open-MSS/data-retrieval.git
        cd data-retrieval
 
-2. Install all requirements
+2. Create an environment and install all requirements
 
-       pip -r install requirements.txt
+       pip install -r requirements.txt
 
 3. Make sure cdo and nco are installed\
    e.g. for Ubuntu/Debian
 
        sudo apt-get install cdo nco netcdf-bin
 
-4. Adjust the settings.config to your liking
+4. Adjust the settings.config to your liking (copy from settings.example)
 
 
 Usage
