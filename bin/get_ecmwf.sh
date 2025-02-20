@@ -91,6 +91,30 @@ export time_units="hours since ${init_date}"
 # Convert grib to netCDF, set init time
 . $BINDIR/convert.sh
 
+if [ $ECTRANS_ID == "none" ]
+then
+    echo "no ectrans transfer -- move data to " $MSSDIR
+  if [ x$TRANSFER_MODEL_LEVELS == x"yes" ]; then
+      mv $mlfile $MSSDIR
+  fi
+  if [ -f $tlfile ]; then
+      mv $tlfile $MSSDIR
+  fi
+  if [ -f $plfile ]; then
+      mv $plfile $MSSDIR
+  fi
+  if [ -f $pvfile ]; then
+      mv $pvfile $MSSDIR
+
+  fi
+  if [ -f $alfile ]; then
+      mv $alfile $MSSDIR
+  fi
+  if [ -f $sfcfile ]; then
+      mv $sfcfile $MSSDIR
+  fi
+else  
+
 if ecaccess-association-list | grep -q $ECTRANS_ID; then
   echo "Transfering files to "$ECTRANS_ID 
   if [ x$TRANSFER_MODEL_LEVELS == x"yes" ]; then
@@ -112,15 +136,30 @@ if ecaccess-association-list | grep -q $ECTRANS_ID; then
       ectrans -remote $ECTRANS_ID -source $sfcfile -target $sfcfile -overwrite -remove
   fi
 fi
-
+fi
 if [[ x$CLEANUP == x"yes" ]]
 then
+  export CYMD=${CLEANUP_YEAR}${CLEANUP_MONTH}${CLEANUP_DAY}
+  export CBASE=${DATASET}.${CYMD}T${HH}.${FCSTEP}
+  echo cleanup $CBASE
+    
   # clean up locally
-  for f in $mlfile $tlfile $plfile $pvfile $alfile $sfcfile grib/${BASE}*.grib;
+  for f in $mlfile $tlfile $plfile $pvfile $alfile $sfcfile grib/${CBASE}*.grib;
   do
       if [ -f $f ];
       then
           rm $f
       fi
   done
+  if [ $ECTRANS_ID == "none" ]
+  then
+    # clean up MSS server dir
+    for f in $MSSDIR/${CBASE}*.nc
+    do
+	if [ -f $f ];
+	then
+            rm $f
+	fi
+    done
+  fi
 fi

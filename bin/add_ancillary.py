@@ -273,7 +273,7 @@ def main():
             ml["pv"].attrs["units"] = VARIABLES["pv"][1]
             ml["pv"].attrs["standard_name"] = VARIABLES["pv"][2]
         finally:
-            ml = ml.drop("metpy_crs")
+            ml = ml.drop_vars("metpy_crs")
     if option.n2:
         print("Adding N2...")
         try:

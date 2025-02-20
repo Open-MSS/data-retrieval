@@ -1,16 +1,22 @@
 # Do not leave any whitespaces
 # variable=value
 
+export PATH=$HOME/miniforge3/envs/retrieval/bin/:$PATH
+
 # write data to the $SCRATCH directory with more available disk quota
 export WORKDIR=$HOME/data-retrieval
-
-export PYTHON=python3
-export CLEANUP=no
+export MSSDIR=/mswms-data/mssdata/ecmwf
+export PYTHON=$HOME/miniforge3/envs/retrieval/bin/python
 
 # configure area, grid, and transfer
 export AREA=75/-15/30/42.5
 export GRID=1.0/1.0
-export ECTRANS_ID=MSS-Data-Transfer
+# Set label for output files
+export LABEL=
+
+# set ECTRANS_ID to "none" if write to local $MSSDIR
+# export ECTRANS_ID=MSS-Data-Transfer
+export ECTRANS_ID=none
 
 # set init and forecast times for testing
 # (default 36h from today 00:00) 
@@ -22,3 +28,7 @@ export HH=00
 export FCSTEP=036
 export STEP=0/to/36/by/6
 
+export CLEANUP=yes
+export CLEANUP_DAY=`date --date=-2days +%d`
+export CLEANUP_MONTH=`date --date=-2days +%m`
+export CLEANUP_YEAR=`date --date=-2days +%Y`
