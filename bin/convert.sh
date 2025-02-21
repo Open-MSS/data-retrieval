@@ -2,13 +2,13 @@
 #Copyright (C) 2021 by Forschungszentrum Juelich GmbH
 #Author(s): Joern Ungermann, May Baer
 
-export mlfile=mss/${BASE}.ml.nc
-export plfile=mss/${BASE}.pl.nc
-export alfile=mss/${BASE}.al.nc
-export tlfile=mss/${BASE}.tl.nc
-export pvfile=mss/${BASE}.pv.nc
-export sfcfile=mss/${BASE}.sfc.nc
-export tmpfile=mss/.${BASE}.tmp
+export mlfile=mss/${BASE}.${LABEL}ml.nc
+export plfile=mss/${BASE}.${LABEL}pl.nc
+export alfile=mss/${BASE}.${LABEL}al.nc
+export tlfile=mss/${BASE}.${LABEL}tl.nc
+export pvfile=mss/${BASE}.${LABEL}pv.nc
+export sfcfile=mss/${BASE}.${LABEL}sfc.nc
+export tmpfile=mss/.${BASE}.${LABEL}tmp
 
 if [ ! -f grib/${BASE}.ml.grib ]; then
    echo FATAL `date` Model level file is missing
@@ -32,9 +32,9 @@ if [[ x$PV_LEVELS != x"" ]]; then
 fi
 
 echo adding gph
-ls
+
 $PYTHON $BINDIR/compute_geopotential_on_ml.py grib/${BASE}.ml.grib grib/${BASE}.ml2.grib -o ${tmpfile}
-ls
+
 cdo -f nc4c -t ecmwf copy ${tmpfile} ${tmpfile}_z
 ncatted -O \
     -a standard_name,z,o,c,geopotential_height \
