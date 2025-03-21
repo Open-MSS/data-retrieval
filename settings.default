@@ -6,6 +6,13 @@ export CLEANUP=no
 export MODEL_REDUCTION="-d lev,0,0 -d lev,16,28,4 -d lev,32,124,2"
 export DATASET=ecmwf
 
+# set ECTRANS_ID to "none" if write to local $MSSDIR
+export ECTRANS_ID=none
+
+# set DOWNLOAD_ONLY to yes if conversion is done by separate script
+export DOWNLOAD_ONLY=no
+
+
 export TRUNCATION=auto # options: none, auto, TXXX (e.g. T21)
 export RESOL=auto      # options: av (archived), auto, TXXX(e.g. T21); truncation shall replace resol but resol is still needed
 export ECMWF_TYPE=fc   
