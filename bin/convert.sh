@@ -69,9 +69,20 @@ if [[ x$SFC_PARAMETERS != x"" ]]; then
         -a standard_name,SSTK,o,c,sea_surface_temperature \
         -a standard_name,U10M,o,c,surface_eastward_wind \
         -a standard_name,V10M,o,c,surface_northward_wind \
-        -a units,HCC,o,c,dimensionless \
+	-a standard_name,TCW,o,c,total_column_water \
+	-a standard_name,TCWV,o,c,total_column_cloud_liquid_water \
+	-a standard_name,T2M,o,c,2_meter_temperature \
+	-a standard_name,D2M,o,c,2_meter_dewpoint \
+	-a standard_name,ISHF,o,c,instantaneous_surface_sensible_heat_flux\
+	-a standard_name,IEWS,o,c,instantaneous_x_surface_stress\
+	-a standard_name,INSS,o,c,instantaneous_y_surface_stress\
+	-a units,HCC,o,c,dimensionless \
         -a units,LCC,o,c,dimensionless \
         -a units,MCC,o,c,dimensionless \
+	-a units,CI,o,c,dimensionless \
+	-a units,LSM,o,c,dimensionless \
+	-a units,ASN,o,c,dimensionless \
+	-a units,SD,o,c,m \
         $sfcfile
 fi
 # extract lnsp and remove lev dimension.
