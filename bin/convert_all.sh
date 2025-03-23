@@ -41,6 +41,8 @@ do
     export BASE=${DATASET}.${YMD}T${HH}.${FCSTEP}
     export init_date=${DATE}T${TIME}
     echo BASE: $BASE
+    export time_units="hours since ${init_date}"
+    echo time_units: "hours since ${init_date}"
 
     lockfile=grib/${DATASET}.${YMD}T${HH}.${FCSTEP}.ready
     echo `date` waiting for lockfile $lockfile
@@ -48,7 +50,7 @@ do
     do
 	sleep 30
 	h_now=`date +%H`
-	if [[ $h_now -ne $h_exit ]] 
+	if [[ $h_now == $h_exit ]] 
 	then
 	    echo lockfile $lockfile not found by `date`
 	    echo exiting script
