@@ -3,6 +3,10 @@
 
 export PYTHON=python
 export CLEANUP=no
+export CLEANUP_DAY=`date --date=-2day +%d`
+export CLEANUP_MONTH=`date --date=-2day +%m`
+export CLEANUP_YEAR=`date --date=-2day +%Y`
+
 export MODEL_REDUCTION="-d lev,0,0 -d lev,16,28,4 -d lev,32,124,2"
 export DATASET=ecmwf
 

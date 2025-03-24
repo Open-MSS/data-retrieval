@@ -31,7 +31,7 @@ fi
 # script should start at 06h/18h to look for 00 12h forecast
 export h_exit=`date --date="+6hours" +%H`
 
-for FCSTEP in 036 072 108 144 228
+for FCSTEP in $FCSTEPS
 do
 
 # Set path, filenames and variables used later in the script
@@ -42,7 +42,7 @@ do
     export init_date=${DATE}T${TIME}
     echo BASE: $BASE
     export time_units="hours since ${init_date}"
-    echo time_units: "hours since ${init_date}"
+
 
     lockfile=grib/${DATASET}.${YMD}T${HH}.${FCSTEP}.ready
     echo `date` waiting for lockfile $lockfile
@@ -58,6 +58,7 @@ do
 	fi
     done
     rm $lockfile
+
     # Convert grib to netCDF, set init time
     echo `date`: converting ${FCSTEP}h forecast
     . $BINDIR/convert.sh
@@ -76,7 +77,6 @@ do
 	fi
 	if [ -f $pvfile ]; then
 	    mv $pvfile $MSSDIR
-	    
 	fi
 	if [ -f $alfile ]; then
 	    mv $alfile $MSSDIR

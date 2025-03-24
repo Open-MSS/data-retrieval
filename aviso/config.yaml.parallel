@@ -1,0 +1,56 @@
+listeners:
+  - event: mars
+    request:
+      class: od
+      expver: 1
+      domain: g
+      stream: oper
+      step: 36
+    triggers:
+      - type: command
+        working_dir: $HOME/data-retrieval/aviso
+        command: $HOME/data-retrieval/bin/get_ecmwf_aviso.sh --date ${request.date} --time ${request.time} --step ${request.step} > mars_${request.time}_${request.step}.out
+  - event: mars
+    request:
+      class: od
+      expver: 1
+      domain: g
+      stream: oper
+      step: 72
+    triggers:
+      - type: command
+        working_dir: $HOME/aviso
+        command: $HOME/data-retrieval/bin/get_ecmwf_aviso.sh --date ${request.date} --time ${request.time} --step ${request.step} > mars_${request.time}_${request.step}.out
+  - event: mars
+    request:
+      class: od
+      expver: 1
+      domain: g
+      stream: oper
+      step: 108
+    triggers:
+      - type: command
+        working_dir: $HOME/aviso
+        command: $HOME/data-retrieval/bin/get_ecmwf_aviso.sh --date ${request.date} --time ${request.time} --step ${request.step} > mars_${request.time}_${request.step}.out
+  - event: mars
+    request:
+      class: od
+      expver: 1
+      domain: g
+      stream: oper
+      step: 144
+    triggers:
+      - type: command
+        working_dir: $HOME/aviso
+        command: $HOME/data-retrieval/bin/get_ecmwf_aviso.sh --date ${request.date} --time ${request.time} --step ${request.step} > mars_${request.time}_${request.step}.out
+  - event: mars
+    request:
+      class: od
+      expver: 1
+      domain: g
+      stream: oper
+      step: 228
+    triggers:
+      - type: command
+        working_dir: $HOME/aviso
+        command: $HOME/data-retrieval/bin/get_ecmwf_aviso.sh --date ${request.date} --time ${request.time} --step ${request.step} > mars_${request.time}_${request.step}.out
