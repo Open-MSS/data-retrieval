@@ -58,6 +58,10 @@ rm ${tmpfile}_z
 if [[ x$SFC_PARAMETERS != x"" ]]; then
     echo converting sfc
     cdo -f nc4c -t ecmwf copy grib/${BASE}.sfc.grib $sfcfile
+
+    cdo showatts  $sfcfile
+    echo "ncatted"
+
     ncatted -O \
         -a standard_name,BLH,o,c,atmosphere_boundary_layer_thickness \
         -a standard_name,CI,o,c,sea_ice_area_fraction \
@@ -69,21 +73,23 @@ if [[ x$SFC_PARAMETERS != x"" ]]; then
         -a standard_name,SSTK,o,c,sea_surface_temperature \
         -a standard_name,U10M,o,c,surface_eastward_wind \
         -a standard_name,V10M,o,c,surface_northward_wind \
-	-a standard_name,TCW,o,c,total_column_water \
-	-a standard_name,TCWV,o,c,total_column_cloud_liquid_water \
-	-a standard_name,T2M,o,c,2_meter_temperature \
-	-a standard_name,D2M,o,c,2_meter_dewpoint \
-	-a standard_name,ISHF,o,c,instantaneous_surface_sensible_heat_flux\
-	-a standard_name,IEWS,o,c,instantaneous_x_surface_stress\
-	-a standard_name,INSS,o,c,instantaneous_y_surface_stress\
-	-a units,HCC,o,c,dimensionless \
+        -a standard_name,TCW,o,c,total_column_water \
+        -a standard_name,TCWV,o,c,total_column_cloud_liquid_water \
+        -a standard_name,T2M,o,c,2_meter_temperature \
+        -a standard_name,D2M,o,c,2_meter_dewpoint \
+        -a standard_name,ISHF,o,c,instantaneous_surface_sensible_heat_flux\
+        -a standard_name,IEWS,o,c,instantaneous_x_surface_stress\
+        -a standard_name,INSS,o,c,instantaneous_y_surface_stress\
+        -a units,HCC,o,c,dimensionless \
         -a units,LCC,o,c,dimensionless \
         -a units,MCC,o,c,dimensionless \
-	-a units,CI,o,c,dimensionless \
-	-a units,LSM,o,c,dimensionless \
-	-a units,ASN,o,c,dimensionless \
-	-a units,SD,o,c,m \
+        -a units,CI,o,c,dimensionless \
+        -a units,LSM,o,c,dimensionless \
+        -a units,ASN,o,c,dimensionless \
+        -a units,SD,o,c,m \
         $sfcfile
+
+    cdo showatts  $sfcfile
 fi
 # extract lnsp and remove lev dimension.
 grib_copy -w shortName=lnsp grib/${BASE}.ml2.grib ${tmpfile}

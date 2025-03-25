@@ -29,5 +29,6 @@ def test_get_cds(tmpdir):
                 assert var in fut.variables
                 for att in ["units", "standard_name"]:
                     if att in ref[var].attrs:
+                        print(var, att, ref[var].attrs[att], fut[var].attrs[att])
                         assert att in fut[var].attrs
                         assert ref[var].attrs[att] == fut[var].attrs[att]
