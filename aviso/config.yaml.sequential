@@ -1,0 +1,12 @@
+listeners:
+  - event: mars
+    request:
+      class: od
+      expver: 1
+      domain: g
+      stream: oper
+      step: [36, 72, 108, 144, 228]
+    triggers:
+      - type: command
+        working_dir: $HOME/data-retrieval/aviso
+        command: $HOME/data-retrieval/bin/get_ecmwf_aviso.sh --date ${request.date} --time ${request.time} --step ${request.step} > mars_${request.time}_${request.step}.out

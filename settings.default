@@ -3,8 +3,19 @@
 
 export PYTHON=python
 export CLEANUP=no
+export CLEANUP_DAY=`date --date=-2day +%d`
+export CLEANUP_MONTH=`date --date=-2day +%m`
+export CLEANUP_YEAR=`date --date=-2day +%Y`
+
 export MODEL_REDUCTION="-d lev,0,0 -d lev,16,28,4 -d lev,32,124,2"
 export DATASET=ecmwf
+
+# set ECTRANS_ID to "none" if write to local $MSSDIR
+export ECTRANS_ID=none
+
+# set DOWNLOAD_ONLY to yes if conversion is done by separate script
+export DOWNLOAD_ONLY=no
+
 
 export TRUNCATION=auto # options: none, auto, TXXX (e.g. T21)
 export RESOL=auto      # options: av (archived), auto, TXXX(e.g. T21); truncation shall replace resol but resol is still needed
@@ -17,7 +28,7 @@ export ANCILLARY="--pv --theta --tropopause --n2 --pressure"
 export MODEL_LEVELS=1/to/137
 export MODEL_PARAMETERS=T/U/V/W/Q/CC/CLWC/CIWC/D/O3
 export MODEL2_PARAMETERS=LNSP/Z
-export SFC_PARAMETERS=LSM/LCC/MCC/HCC/MSL/SP/SSTK/TCC/TCW/TCWV/10U/10V/2D/2T/SKT/ASN/CI/BLH/CAPE/SD/IEWS/INSS/ISHF
+export SFC_PARAMETERS=LSM/LCC/MCC/HCC/MSL/SP/SSTK/TCC/TCW/TCWV/10U/10V/2D/2T/SKT/ASN/CI/BLH/SD/IEWS/INSS/ISHF
 
 export PV_PARAMETERS=Z/PRES/PT/U/V/Q/O3
 export PV_LEVELS=2000
